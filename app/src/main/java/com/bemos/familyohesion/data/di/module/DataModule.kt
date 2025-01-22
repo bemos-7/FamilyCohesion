@@ -1,7 +1,65 @@
 package com.bemos.familyohesion.data.di.module
 
+import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseAuthImpl
+import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
+import com.bemos.familyohesion.domain.use_cases.SignInUseCase
+import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import dagger.Module
+import dagger.Provides
 
 @Module
 class DataModule {
+
+    @Provides
+    fun provideFirebase(): Firebase {
+        return Firebase
+    }
+
+    @Provides
+    fun provideFirebaseAuth(
+        firebase: Firebase
+    ): FirebaseAuth {
+        return firebase.auth
+    }
+
+    @Provides
+    fun provideFirebaseFirestore(
+        firebase: Firebase
+    ): FirebaseFirestore {
+        return firebase.firestore
+    }
+
+    @Provides
+    fun provideFirebaseAuthRepository(
+        firebaseAuth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ): FirebaseAuthRepository {
+        return FirebaseAuthImpl(
+            firebaseAuth = firebaseAuth,
+            firebaseFirestore = firestore
+        )
+    }
+
+    @Provides
+    fun provideSignUpUseCase(
+        firebaseAuthRepository: FirebaseAuthRepository
+    ): SignUpUseCase {
+        return SignUpUseCase(
+            repository = firebaseAuthRepository
+        )
+    }
+
+    @Provides
+    fun provideSignInUseCase(
+        firebaseAuthRepository: FirebaseAuthRepository
+    ): SignInUseCase {
+        return SignInUseCase(
+            repository = firebaseAuthRepository
+        )
+    }
 }
