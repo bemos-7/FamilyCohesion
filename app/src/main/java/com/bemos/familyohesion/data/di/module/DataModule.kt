@@ -1,7 +1,10 @@
 package com.bemos.familyohesion.data.di.module
 
 import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseAuthImpl
+import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseFirestoreImpl
 import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
+import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
+import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
 import com.google.firebase.Firebase
@@ -46,6 +49,17 @@ class DataModule {
     }
 
     @Provides
+    fun provideFirebaseFirestoreRepository(
+        firestore: FirebaseFirestore,
+        auth: FirebaseAuth
+    ): FirebaseFirestoreRepository {
+        return FirebaseFirestoreImpl(
+            firestore = firestore,
+            auth = auth
+        )
+    }
+
+    @Provides
     fun provideSignUpUseCase(
         firebaseAuthRepository: FirebaseAuthRepository
     ): SignUpUseCase {
@@ -60,6 +74,15 @@ class DataModule {
     ): SignInUseCase {
         return SignInUseCase(
             repository = firebaseAuthRepository
+        )
+    }
+
+    @Provides
+    fun provideGetSkillsUseCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): GetSkillsUseCase {
+        return GetSkillsUseCase(
+            repository = firebaseFirestoreRepository
         )
     }
 }
