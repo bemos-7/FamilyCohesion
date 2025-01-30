@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bemos.familyohesion.presentation.di.app_component.appComponent
+import com.bemos.familyohesion.presentation.features.select_skill.SelectSkillScreen
+import com.bemos.familyohesion.presentation.features.select_skill.vm.factory.SelectSkillViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_in.SignInScreen
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_up.SignUpScreen
@@ -22,6 +24,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var signInViewModelFactory: SignInViewModelFactory
 
+    @Inject
+    lateinit var selectSkillViewModelFactory: SelectSkillViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.inject(this)
         super.onCreate(savedInstanceState)
@@ -29,7 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FamilyСohesionTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "signUp") {
+                NavHost(navController = navController, startDestination = "selectSkill") {
                     composable(
                         route = "signUp"
                     ) {
@@ -43,6 +48,14 @@ class MainActivity : ComponentActivity() {
                     ) {
                         SignInScreen(
                             signInViewModelFactory = signInViewModelFactory
+                        )
+                    }
+                    composable(
+                        route = "selectSkill"
+                    ) {
+                        SelectSkillScreen(
+                            navController = navController,
+                            selectSkillViewModelFactory = selectSkillViewModelFactory
                         )
                     }
                 }
