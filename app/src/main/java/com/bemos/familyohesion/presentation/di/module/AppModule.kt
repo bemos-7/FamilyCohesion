@@ -1,7 +1,10 @@
 package com.bemos.familyohesion.presentation.di.module
 
+import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
+import com.bemos.familyohesion.presentation.features.select_skill.vm.SelectSkillViewModel
+import com.bemos.familyohesion.presentation.features.select_skill.vm.factory.SelectSkillViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_up.vm.factory.SignUpViewModelFactory
 import dagger.Module
@@ -26,6 +29,15 @@ class AppModule {
     ): SignInViewModelFactory {
         return SignInViewModelFactory(
             signInUseCase = signInUseCase
+        )
+    }
+
+    @Provides
+    fun provideSelectSkillViewModelFactory(
+        getSkillsUseCase: GetSkillsUseCase
+    ): SelectSkillViewModelFactory {
+        return SelectSkillViewModelFactory(
+            getSkillsUseCase = getSkillsUseCase
         )
     }
 
