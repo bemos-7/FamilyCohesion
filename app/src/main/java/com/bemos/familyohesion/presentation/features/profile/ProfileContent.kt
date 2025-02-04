@@ -8,25 +8,39 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bemos.familyohesion.R
+import com.bemos.familyohesion.domain.models.FamilyMember
+import com.bemos.familyohesion.domain.models.User
+import com.bemos.familyohesion.presentation.features.profile.utils.ui.FamilyMemberRatingUi
+import com.bemos.familyohesion.presentation.features.profile.utils.ui.FamilyMemberUi
+import com.bemos.familyohesion.ui.theme.Red
 import com.bemos.familyohesion.ui.theme.White
 
 @Composable
-fun ProfileContent() {
+fun ProfileContent(
+    user: User,
+    familyMembers: List<FamilyMember>
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(White)
+            .padding(top = 50.dp)
     ) {
         Card(
             Modifier
@@ -41,21 +55,50 @@ fun ProfileContent() {
             ) {
                 Spacer(modifier = Modifier.height(18.dp))
                 Text(
-                    text = "Name",
+                    text = "${user.name}",
                     fontSize = 32.sp
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row {
-                    Text(
-                        text = "почта: "
-                    )
+                    Column {
+                        Text(
+                            text = "Почта:"
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "Пароль:"
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Column {
+                        Text(
+                            text = "${user.email}"
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "***************"
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    Text(
-                        text = "пароль: "
-                    )
+                Spacer(modifier = Modifier.height(18.dp))
+                Column {
+                    Row {
+                        Icon(
+                            painter = painterResource(
+                                id = R.drawable.edit
+                            ),
+                            contentDescription = null,
+                            tint = Color.Unspecified
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Изменить",
+                            color = Red,
+                            fontSize = 16.sp
+                        )
+                    }
                 }
+                Spacer(modifier = Modifier.height(14.dp))
             }
         }
         Spacer(modifier = Modifier.height(7.dp))
@@ -76,8 +119,17 @@ fun ProfileContent() {
                     fontSize = 24.sp
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-
             }
+            Spacer(modifier = Modifier.height(18.dp))
+            LazyColumn() {
+                items(items = familyMembers) {
+                    FamilyMemberRatingUi(
+                        familyMember = it,
+                        currentUserName = user.name
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(18.dp))
         }
         Spacer(modifier = Modifier.height(7.dp))
         Card(
@@ -96,9 +148,19 @@ fun ProfileContent() {
                     text = "Семья",
                     fontSize = 24.sp
                 )
-                Spacer(modifier = Modifier.height(10.dp))
-
+                Spacer(modifier = Modifier.height(7.dp))
             }
+            LazyColumn() {
+                items(
+                    items = familyMembers
+                ) {
+                    FamilyMemberUi(
+                        familyMember = it,
+                        currentUserName = user.name
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(6.dp))
         }
     }
 }
@@ -106,5 +168,35 @@ fun ProfileContent() {
 @Preview
 @Composable
 fun ProfileContentPreview(modifier: Modifier = Modifier) {
-    ProfileContent()
+    ProfileContent(
+        User(
+            email = "something@mail.ru",
+            familyId = "",
+            name = "Борис",
+            role = "Отец",
+            userId = ""
+        ),
+        listOf(
+            FamilyMember(
+                "Борис",
+                "",
+                12.2
+            ),
+            FamilyMember(
+                "Антон",
+                "",
+                12.2
+            ),
+            FamilyMember(
+                "Маша",
+                "",
+                12.2
+            ),
+            FamilyMember(
+                "Андрес",
+                "",
+                12.2
+            ),
+        )
+    )
 }

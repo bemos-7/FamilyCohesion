@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bemos.familyohesion.presentation.di.app_component.appComponent
+import com.bemos.familyohesion.presentation.features.profile.ProfileScreen
+import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
 import com.bemos.familyohesion.presentation.features.select_skill.SelectSkillScreen
 import com.bemos.familyohesion.presentation.features.select_skill.vm.factory.SelectSkillViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_in.SignInScreen
@@ -27,6 +29,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var selectSkillViewModelFactory: SelectSkillViewModelFactory
 
+    @Inject
+    lateinit var profileViewModelFactory: ProfileViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.inject(this)
         super.onCreate(savedInstanceState)
@@ -34,7 +39,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FamilyСohesionTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "selectSkill") {
+                NavHost(navController = navController, startDestination = "profile") {
                     composable(
                         route = "signUp"
                     ) {
@@ -56,6 +61,14 @@ class MainActivity : ComponentActivity() {
                         SelectSkillScreen(
                             navController = navController,
                             selectSkillViewModelFactory = selectSkillViewModelFactory
+                        )
+                    }
+                    composable(
+                        route = "profile"
+                    ) {
+                        ProfileScreen(
+                            navController = navController,
+                            profileViewModelFactory = profileViewModelFactory
                         )
                     }
                 }
