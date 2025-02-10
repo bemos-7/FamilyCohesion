@@ -24,6 +24,9 @@ fun ProfileScreen(
 
     ProfileContent(
         user = onComplete,
-        familyMembers = onResult
+        familyMembers = onResult,
+        onFamilyMemberAdd = {
+            navController.navigate("addFamilyMember/$it")
+        }
     )
 }
