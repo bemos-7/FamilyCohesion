@@ -8,6 +8,7 @@ import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
+import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -103,6 +104,15 @@ class DataModule {
     ): GetFamilyMembersUseCase {
         return GetFamilyMembersUseCase(
             repository = firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun signUpAndJoinFamilyUseCase(
+        firebaseAuthRepository: FirebaseAuthRepository
+    ): SignUpAndJoinFamilyUseCase {
+        return SignUpAndJoinFamilyUseCase(
+            repository = firebaseAuthRepository
         )
     }
 }
