@@ -8,6 +8,7 @@ import com.bemos.familyohesion.domain.models.UserAuth
 import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
@@ -55,6 +56,51 @@ class FirebaseAuthImpl(
                             )
                         )
                     }.addOnSuccessListener {
+                        onSuccess()
+                    }.addOnFailureListener { exception ->
+                        onFailure(exception)
+                    }
+                } else {
+                    task.exception?.let { onFailure(it) }
+                }
+            }
+    }
+
+    override fun signUpAndJoinFamily(
+        userAuth: UserAuth,
+        familyId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val currentUser = firebaseAuth.currentUser
+
+        firebaseAuth.createUserWithEmailAndPassword(userAuth.email, userAuth.password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = task.result?.user?.uid ?: return@addOnCompleteListener
+
+                    val userDocRef = firebaseFirestore.collection("users").document(userId)
+                    val familyDocRef = firebaseFirestore.collection("families").document(familyId)
+
+                    firebaseFirestore.runBatch { batch ->
+                        val newMember = mapOf(
+                            "name" to userAuth.name,
+                            "points" to 0,
+                            "relation" to userAuth.userRole
+                        )
+                        batch.update(familyDocRef, "members", FieldValue.arrayUnion(newMember))
+                        batch.set(
+                            userDocRef,
+                            mapOf(
+                                "userId" to userId,
+                                "email" to userAuth.email,
+                                "name" to userAuth.name,
+                                "familyId" to familyId,
+                                "role" to userAuth.userRole
+                            )
+                        )
+                    }.addOnSuccessListener {
+                        currentUser?.let { firebaseAuth.updateCurrentUser(it) }
                         onSuccess()
                     }.addOnFailureListener { exception ->
                         onFailure(exception)

@@ -4,10 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.bemos.familyohesion.presentation.di.app_component.appComponent
+import com.bemos.familyohesion.presentation.features.add_family_member.AddFamilyMemberScreen
+import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
 import com.bemos.familyohesion.presentation.features.profile.ProfileScreen
 import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
 import com.bemos.familyohesion.presentation.features.select_skill.SelectSkillScreen
@@ -31,6 +36,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var profileViewModelFactory: ProfileViewModelFactory
+
+    @Inject
+    lateinit var addFamilyMemberViewModelFactory: AddFamilyMemberViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.inject(this)
@@ -69,6 +77,20 @@ class MainActivity : ComponentActivity() {
                         ProfileScreen(
                             navController = navController,
                             profileViewModelFactory = profileViewModelFactory
+                        )
+                    }
+                    composable(
+                        route = "addFamilyMember/{familyId}",
+                        arguments = listOf(
+                            navArgument("familyId") {
+                                type = NavType.StringType
+                            }
+                        )
+                    ) { navBackStackEntry ->
+                        AddFamilyMemberScreen(
+                            navController = navController,
+                            addFamilyMemberViewModelFactory = addFamilyMemberViewModelFactory,
+                            familyId = navBackStackEntry.arguments?.getString("familyId")
                         )
                     }
                 }

@@ -4,7 +4,9 @@ import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
+import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
+import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
 import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
 import com.bemos.familyohesion.presentation.features.select_skill.vm.SelectSkillViewModel
 import com.bemos.familyohesion.presentation.features.select_skill.vm.factory.SelectSkillViewModelFactory
@@ -52,6 +54,15 @@ class AppModule {
         return ProfileViewModelFactory(
             getUserDataUseCase = getUserDataUseCase,
             getFamilyMembersUseCase = getFamilyMembersUseCase
+        )
+    }
+
+    @Provides
+    fun provideAddFamilyMemberViewModelFactory(
+        signUpAndJoinFamilyUseCase: SignUpAndJoinFamilyUseCase
+    ): AddFamilyMemberViewModelFactory {
+        return AddFamilyMemberViewModelFactory(
+            signUpAndJoinFamilyUseCase = signUpAndJoinFamilyUseCase
         )
     }
 

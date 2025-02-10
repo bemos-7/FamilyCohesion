@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,13 +31,15 @@ import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.User
 import com.bemos.familyohesion.presentation.features.profile.utils.ui.FamilyMemberRatingUi
 import com.bemos.familyohesion.presentation.features.profile.utils.ui.FamilyMemberUi
+import com.bemos.familyohesion.shared.utils.ui.button.CustomButton
 import com.bemos.familyohesion.ui.theme.Red
 import com.bemos.familyohesion.ui.theme.White
 
 @Composable
 fun ProfileContent(
     user: User,
-    familyMembers: List<FamilyMember>
+    familyMembers: List<FamilyMember>,
+    onFamilyMemberAdd: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -150,7 +155,7 @@ fun ProfileContent(
                 )
                 Spacer(modifier = Modifier.height(7.dp))
             }
-            LazyColumn() {
+            LazyColumn {
                 items(
                     items = familyMembers
                 ) {
@@ -158,6 +163,27 @@ fun ProfileContent(
                         familyMember = it,
                         currentUserName = user.name
                     )
+                }
+
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Button(
+                            onClick = {
+                                onFamilyMemberAdd(user.familyId)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Red
+                            )
+                        ) {
+                            Text(
+                                text = "Добавить"
+                            )
+                        }
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(6.dp))
@@ -197,6 +223,7 @@ fun ProfileContentPreview(modifier: Modifier = Modifier) {
                 "",
                 12.2
             ),
-        )
+        ),
+        onFamilyMemberAdd = {}
     )
 }
