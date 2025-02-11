@@ -1,6 +1,7 @@
 package com.bemos.familyohesion.data.remote.firebase.repository.impl
 
 import android.util.Log
+import com.bemos.familyohesion.domain.models.Category
 import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.Skill
 import com.bemos.familyohesion.domain.models.SubSkill
@@ -15,45 +16,6 @@ class FirebaseFirestoreImpl(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
 ): FirebaseFirestoreRepository {
-    override fun getSkills(onComplete: (Map<String, List<Skill>>) -> Unit, onFailure: (Exception) -> Unit) {
-//        val skillsMap = mutableMapOf<String, MutableList<Skill>>()
-//
-//        firestore.collection("skills").get().addOnSuccessListener { categoriesSnapshot ->
-//            val totalCategories = categoriesSnapshot.size()
-//            var processedCategories = 0
-//
-//            for (categoryDoc in categoriesSnapshot.documents) {
-//                val categoryName = categoryDoc.id
-//                val skillsList = mutableListOf<Skill>()
-//
-//                categoryDoc.reference.collection("skills").get().addOnSuccessListener { skillsSnapshot ->
-//                    for (skillDoc in skillsSnapshot.documents) {
-//                        val skillName = skillDoc.getString("name") ?: "Unknown Skill"
-//                        val subSkills = mutableListOf<SubSkill>()
-//
-//                        val subSkillsList = skillDoc.get("subSkills") as? List<Map<String, Any>> ?: emptyList()
-//                        for (subSkillData in subSkillsList) {
-//                            val subSkillName = subSkillData["name"] as? String ?: "Unknown SubSkill"
-//                            val subSkillPoints = (subSkillData["points"] as? Long)?.toInt() ?: 1
-//                            subSkills.add(SubSkill(subSkillName, subSkillPoints))
-//                        }
-//
-//                        skillsList.add(Skill(skillName, subSkills))
-//                    }
-//
-//                    skillsMap[categoryName] = skillsList.toMutableList()
-//
-//                    processedCategories++
-//                    if (processedCategories == totalCategories) {
-//                        onComplete(skillsMap)
-//                        Log.d("aalskdjf", skillsMap.toString())
-//                    }
-//                }
-//            }
-//        }.addOnFailureListener { exception ->
-//            onFailure(exception)
-//        }
-    }
 
     override fun getUserData(onComplete: (User) -> Unit, onFailure: (Exception) -> Unit) {
         val docRef = firestore.collection("users").document(auth.currentUser!!.uid)
@@ -93,5 +55,53 @@ class FirebaseFirestoreImpl(
                 exception.printStackTrace()
                 onResult(emptyList())
             }
+    }
+
+    override fun getCategories(
+        onComplete: (List<Category>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firestore.collection("categories").get()
+            .addOnSuccessListener { documents ->
+                val categories = documents.map {
+                    it.toObject(Category::class.java)
+                }
+                onComplete(categories)
+            }
+            .addOnFailureListener(onFailure)
+    }
+
+    override fun getSkills(
+        categoryId: String,
+        onComplete: (List<Skill>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firestore.collection("skills").get()
+            .addOnSuccessListener { documents ->
+                val skills = documents.map {
+                    it.toObject(Skill::class.java)
+                }.filter { skill ->
+                    skill.categoryId == categoryId
+                }
+                onComplete(skills)
+            }
+            .addOnFailureListener(onFailure)
+    }
+
+    override fun getSubSkills(
+        skillId: String,
+        onComplete: (List<SubSkill>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firestore.collection("subSkills").get()
+            .addOnSuccessListener { documents ->
+                val subSkills = documents.map {
+                    it.toObject(SubSkill::class.java)
+                }.filter { subSkill ->
+                    subSkill.skillId == skillId
+                }
+                onComplete(subSkills)
+            }
+            .addOnFailureListener(onFailure)
     }
 }

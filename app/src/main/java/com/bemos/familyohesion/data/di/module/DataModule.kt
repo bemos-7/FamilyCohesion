@@ -4,8 +4,10 @@ import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseAuth
 import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseFirestoreImpl
 import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
 import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
+import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
+import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
@@ -113,6 +115,24 @@ class DataModule {
     ): SignUpAndJoinFamilyUseCase {
         return SignUpAndJoinFamilyUseCase(
             repository = firebaseAuthRepository
+        )
+    }
+
+    @Provides
+    fun getCategoriesUseCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): GetCategoriesUseCase {
+        return GetCategoriesUseCase(
+            repository = firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun getSubSkillsUseCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): GetSubSkillsUseCase {
+        return GetSubSkillsUseCase(
+            repository = firebaseFirestoreRepository
         )
     }
 }

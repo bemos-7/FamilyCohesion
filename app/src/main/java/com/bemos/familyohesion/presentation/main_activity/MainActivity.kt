@@ -15,12 +15,12 @@ import com.bemos.familyohesion.presentation.features.add_family_member.AddFamily
 import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
 import com.bemos.familyohesion.presentation.features.profile.ProfileScreen
 import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
-import com.bemos.familyohesion.presentation.features.select_skill.SelectSkillScreen
-import com.bemos.familyohesion.presentation.features.select_skill.vm.factory.SelectSkillViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_in.SignInScreen
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_up.SignUpScreen
 import com.bemos.familyohesion.presentation.features.sign_up.vm.factory.SignUpViewModelFactory
+import com.bemos.familyohesion.presentation.features.skills.SkillsScreen
+import com.bemos.familyohesion.presentation.features.skills.vm.factory.SkillsViewModelFactory
 import com.bemos.familyohesion.ui.theme.FamilyСohesionTheme
 import javax.inject.Inject
 
@@ -32,13 +32,13 @@ class MainActivity : ComponentActivity() {
     lateinit var signInViewModelFactory: SignInViewModelFactory
 
     @Inject
-    lateinit var selectSkillViewModelFactory: SelectSkillViewModelFactory
-
-    @Inject
     lateinit var profileViewModelFactory: ProfileViewModelFactory
 
     @Inject
     lateinit var addFamilyMemberViewModelFactory: AddFamilyMemberViewModelFactory
+
+    @Inject
+    lateinit var skillsViewModelFactory: SkillsViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.inject(this)
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FamilyСohesionTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "profile") {
+                NavHost(navController = navController, startDestination = "skills") {
                     composable(
                         route = "signUp"
                     ) {
@@ -61,14 +61,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         SignInScreen(
                             signInViewModelFactory = signInViewModelFactory
-                        )
-                    }
-                    composable(
-                        route = "selectSkill"
-                    ) {
-                        SelectSkillScreen(
-                            navController = navController,
-                            selectSkillViewModelFactory = selectSkillViewModelFactory
                         )
                     }
                     composable(
@@ -91,6 +83,14 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             addFamilyMemberViewModelFactory = addFamilyMemberViewModelFactory,
                             familyId = navBackStackEntry.arguments?.getString("familyId")
+                        )
+                    }
+                    composable(
+                        route = "skills"
+                    ) {
+                        SkillsScreen(
+                            navController = navController,
+                            skillsViewModelFactory = skillsViewModelFactory
                         )
                     }
                 }

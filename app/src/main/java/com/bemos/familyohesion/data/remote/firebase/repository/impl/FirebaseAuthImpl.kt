@@ -1,6 +1,7 @@
 package com.bemos.familyohesion.data.remote.firebase.repository.impl
 
 import android.util.Log
+import com.bemos.familyohesion.domain.models.Category
 import com.bemos.familyohesion.domain.models.Family
 import com.bemos.familyohesion.domain.models.Skill
 import com.bemos.familyohesion.domain.models.SubSkill
@@ -321,6 +322,98 @@ class FirebaseAuthImpl(
 //
 //                categoryRef.collection("skills").add(skillData)
 //                    .addOnSuccessListener { println("Добавлен навык: ${skill.name}") }
+//                    .addOnFailureListener { e -> println("Ошибка: ${e.message}") }
+//            }
+//        }
+
+//        val categories = mapOf(
+//            "category1" to Category(id = "category1", name = "Кулинария"),
+//            "category2" to Category(id = "category2", name = "Рисование")
+//        )
+//
+//        val skills = mapOf(
+//            "skill1" to Skill(
+//                id = "skill1",
+//                name = "Приготовление пиццы",
+//                categoryId = "category1",
+//                subSkills = listOf(
+//                    SubSkill(id = "subSkill1", name = "Приготовить пеперони", points = 3, skillId = "skill1"),
+//                    SubSkill(id = "subSkill2", name = "Приготовить 4 сыра", points = 2, skillId = "skill1"),
+//                    SubSkill(id = "subSkill3", name = "Приготовить маргариту", points = 2, skillId = "skill1"),
+//                    SubSkill(id = "subSkill4", name = "Приготовить охотничью", points = 1, skillId = "skill1"),
+//                    SubSkill(id = "subSkill5", name = "Приготовить грибную пиццу", points = 2, skillId = "skill1"),
+//                    SubSkill(id = "subSkill6", name = "Приготовить овощную пиццу", points = 1, skillId = "skill1"),
+//                    SubSkill(id = "subSkill7", name = "Приготовить пиццу с морепродуктами", points = 3, skillId = "skill1")
+//                )
+//            ),
+//            "skill2" to Skill(
+//                id = "skill2",
+//                name = "Приготовление супов",
+//                categoryId = "category1",
+//                subSkills = listOf(
+//                    SubSkill(id = "subSkill8", name = "Сварить борщ", points = 3, skillId = "skill2"),
+//                    SubSkill(id = "subSkill9", name = "Сварить рассольник", points = 2, skillId = "skill2"),
+//                    SubSkill(id = "subSkill10", name = "Сварить куриный суп", points = 1, skillId = "skill2"),
+//                    SubSkill(id = "subSkill11", name = "Сварить крем-суп из грибов", points = 2, skillId = "skill2"),
+//                    SubSkill(id = "subSkill12", name = "Сварить овощной суп", points = 1, skillId = "skill2"),
+//                    SubSkill(id = "subSkill13", name = "Сварить рыбный суп", points = 3, skillId = "skill2")
+//                )
+//            ),
+//            "skill3" to Skill(
+//                id = "skill3",
+//                name = "Основы рисования",
+//                categoryId = "category2",
+//                subSkills = listOf(
+//                    SubSkill(id = "subSkill14", name = "Нарисовать домик", points = 1, skillId = "skill3"),
+//                    SubSkill(id = "subSkill15", name = "Нарисовать дерево", points = 1, skillId = "skill3"),
+//                    SubSkill(id = "subSkill16", name = "Нарисовать солнце", points = 1, skillId = "skill3"),
+//                    SubSkill(id = "subSkill17", name = "Нарисовать радугу", points = 1, skillId = "skill3")
+//                )
+//            ),
+//            "skill4" to Skill(
+//                id = "skill4",
+//                name = "Цвета и тени",
+//                categoryId = "category2",
+//                subSkills = listOf(
+//                    SubSkill(id = "subSkill18", name = "Закрасить круг одним цветом", points = 1, skillId = "skill4"),
+//                    SubSkill(id = "subSkill19", name = "Сделать градиент от темного к светлому", points = 2, skillId = "skill4"),
+//                    SubSkill(id = "subSkill20", name = "Нарисовать тень от объекта", points = 2, skillId = "skill4"),
+//                    SubSkill(id = "subSkill21", name = "Смешать два цвета", points = 2, skillId = "skill4")
+//                )
+//            )
+//        )
+//
+//// Добавление категорий
+//        categories.forEach { (id, name) ->
+//            val categoryData = mapOf(
+//                "id" to id,
+//                "name" to name
+//            )
+//            firebaseFirestore.collection("categories").document(id).set(categoryData)
+//                .addOnSuccessListener { println("Добавлена категория: $name") }
+//                .addOnFailureListener { e -> println("Ошибка: ${e.message}") }
+//        }
+//
+//// Добавление навыков и поднавыков
+//        skills.forEach { (id, skill) ->
+//            val skillData = mapOf(
+//                "id" to id,
+//                "name" to skill.name,
+//                "categoryId" to skill.categoryId
+//            )
+//            firebaseFirestore.collection("skills").document(id).set(skillData)
+//                .addOnSuccessListener { println("Добавлен навык: ${skill.name}") }
+//                .addOnFailureListener { e -> println("Ошибка: ${e.message}") }
+//
+//            skill.subSkills.forEach { subSkill ->
+//                val subSkillData = mapOf(
+//                    "id" to UUID.randomUUID().toString(),
+//                    "name" to subSkill.name,
+//                    "points" to subSkill.points,
+//                    "skillId" to id
+//                )
+//                firebaseFirestore.collection("subSkills").add(subSkillData)
+//                    .addOnSuccessListener { println("Добавлен поднавык: ${subSkill.name}") }
 //                    .addOnFailureListener { e -> println("Ошибка: ${e.message}") }
 //            }
 //        }

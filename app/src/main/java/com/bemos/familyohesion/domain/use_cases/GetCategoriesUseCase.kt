@@ -1,16 +1,16 @@
 package com.bemos.familyohesion.domain.use_cases
 
-import com.bemos.familyohesion.domain.models.Skill
+import com.bemos.familyohesion.domain.models.Category
 import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
 
-class GetSkillsUseCase(
+class GetCategoriesUseCase(
     private val repository: FirebaseFirestoreRepository
 ) {
     fun execute(
-        categoryId: String, onComplete: (List<Skill>) -> Unit, onFailure: (Exception) -> Unit
+        onComplete: (List<Category>) -> Unit,
+        onFailure: (Exception) -> Unit
     ) {
-        repository.getSkills(
-            categoryId = categoryId,
+        repository.getCategories(
             onComplete = onComplete,
             onFailure = onFailure
         )
