@@ -1,6 +1,7 @@
 package com.bemos.familyohesion.presentation.features.skills.utils.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -17,13 +18,17 @@ import com.bemos.familyohesion.ui.theme.RedAlpha03
 
 @Composable
 fun SkillUi(
-    skill: Skill
+    skill: Skill,
+    onClick: (String) -> Unit
 ) {
     Card(
         border = BorderStroke(width = 1.dp, RedAlpha03),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        )
+        ),
+        modifier = Modifier.clickable {
+            onClick(skill.id)
+        }
     ) {
         Row(
             modifier = Modifier.padding(vertical = 24.dp, horizontal = 14.dp)
@@ -45,6 +50,7 @@ private fun SkillUiPreview() {
             name = "Приготовление супов",
             categoryId = "",
             subSkills = listOf()
-        )
+        ),
+        onClick = {}
     )
 }

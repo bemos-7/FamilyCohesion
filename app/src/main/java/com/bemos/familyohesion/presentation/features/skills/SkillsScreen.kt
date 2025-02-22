@@ -33,6 +33,12 @@ fun SkillsScreen(
 
     SkillsContent(
         categories = categories,
-        skills = skills
+        skills = skills,
+        subSkills = subSkills,
+        onSkillClick = { skillId ->
+            viewModel.getSubSkills(
+                skillId
+            )
+        }
     )
 }
