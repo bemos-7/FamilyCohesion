@@ -9,6 +9,7 @@ import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
 import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
+import com.bemos.familyohesion.presentation.features.finish_subSkill.vm.factory.FinishSubSkillViewModelFactory
 import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_up.vm.factory.SignUpViewModelFactory
@@ -68,6 +69,17 @@ class AppModule {
             getCategoriesUseCase = getCategoriesUseCase,
             getSkillsUseCase = getSkillsUseCase,
             getSubSkillsUseCase = getSubSkillsUseCase
+        )
+    }
+
+    @Provides
+    fun provideFinishSubSkillViewModelFactory(
+        getUserDataUseCase: GetUserDataUseCase,
+        getFamilyMembersUseCase: GetFamilyMembersUseCase
+    ): FinishSubSkillViewModelFactory {
+        return FinishSubSkillViewModelFactory(
+            getUserDataUseCase = getUserDataUseCase,
+            getFamilyMembersUseCase = getFamilyMembersUseCase
         )
     }
 
