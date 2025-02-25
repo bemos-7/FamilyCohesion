@@ -12,5 +12,6 @@ val Pink40 = Color(0xFF7D5260)
 
 val RedAlpha = Color(0xFFE13117).copy(alpha = 0.6f)
 val RedAlpha03 = Color(0xFFE13117).copy(alpha = 0.2f)
+val LightGray = Color(0xFFD9D9D9)
 val Red = Color(0xFFE13117)
 val White = Color(0xFFF3F3F3)
