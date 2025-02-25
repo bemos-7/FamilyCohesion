@@ -39,6 +39,9 @@ fun SkillsScreen(
             viewModel.getSubSkills(
                 skillId
             )
+        },
+        onFinishSubSkill = { subSkillName ->
+            navController.navigate("finishSubSkill/${subSkillName}")
         }
     )
 }

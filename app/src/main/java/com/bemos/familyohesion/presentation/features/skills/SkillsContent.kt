@@ -1,6 +1,5 @@
 package com.bemos.familyohesion.presentation.features.skills
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,6 +36,7 @@ import com.bemos.familyohesion.R
 import com.bemos.familyohesion.domain.models.Category
 import com.bemos.familyohesion.domain.models.Skill
 import com.bemos.familyohesion.domain.models.SubSkill
+import com.bemos.familyohesion.presentation.app.App
 import com.bemos.familyohesion.presentation.features.skills.utils.ui.SkillUi
 import com.bemos.familyohesion.presentation.features.skills.utils.ui.SubSkillUi
 
@@ -46,17 +46,20 @@ fun SkillsContent(
     categories: List<Category>,
     skills: List<Skill>,
     subSkills: List<SubSkill>?,
-    onSkillClick: (String) -> Unit
+    onSkillClick: (String) -> Unit,
+    onFinishSubSkill: (String) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     var isBottomSheetVisible by remember {
         mutableStateOf(false)
     }
+    var bottomSheetSkill by remember {
+        mutableStateOf("")
+    }
 
     Column(
         Modifier
             .fillMaxSize()
-            .padding(top = 50.dp)
     ) {
         Row(
             Modifier
@@ -86,7 +89,8 @@ fun SkillsContent(
             }
         }
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2)
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(items = skills) {
                 SkillUi(
@@ -94,6 +98,7 @@ fun SkillsContent(
                     onClick = { id ->
                         onSkillClick(id)
                         isBottomSheetVisible = true
+                        bottomSheetSkill = it.name
                     }
                 )
             }
@@ -106,15 +111,27 @@ fun SkillsContent(
             },
             sheetState = sheetState,
         ) {
+            Text(
+                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),
+                text = bottomSheetSkill,
+                fontSize = 24.sp
+            )
             if (subSkills != null) {
                 LazyColumn(
                     modifier = Modifier.padding(
                         horizontal = 17.dp
-                    )
+                    ),
                 ) {
                     items(items = subSkills) {
                         SubSkillUi(
-                            it
+                            subSkill = it,
+                            onEventClick = { subSkill ->
+                                if (!App.listOfSubSkills.contains(subSkill)) {
+                                    App.listOfSubSkills.add(subSkill)
+                                } else {
+                                    onFinishSubSkill(it.name)
+                                }
+                            }
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                     }
@@ -155,6 +172,7 @@ private fun SkillsContentPreview() {
             ),
         ),
         subSkills = listOf(),
-        onSkillClick = {}
+        onSkillClick = {},
+        onFinishSubSkill = {}
     )
 }
