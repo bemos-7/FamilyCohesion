@@ -25,8 +25,10 @@ import kotlin.math.roundToInt
 
 @Composable
 fun FamilyMemberRatingUi(
+    modifier: Modifier = Modifier,
     familyMember: FamilyMember,
-    currentUserName: String
+    currentUserName: String,
+    memberNumber: Int
 ) {
     if (familyMember.name != currentUserName) {
         Row(
@@ -37,7 +39,7 @@ fun FamilyMemberRatingUi(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "1",
+                text = memberNumber.toString(),
                 fontSize = 16.sp
             )
             Spacer(modifier = Modifier.width(11.dp))
@@ -66,7 +68,7 @@ fun FamilyMemberRatingUi(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "1",
+                text = memberNumber.toString(),
                 fontSize = 16.sp,
                 color = Red
             )
@@ -100,6 +102,7 @@ private fun FamilyMemberRatingUiPreview() {
             "",
             12.2
         ),
-        currentUserName = "Some"
+        currentUserName = "Some",
+        memberNumber = 1
     )
 }

@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
@@ -16,12 +19,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.presentation.di.app_component.appComponent
 import com.bemos.familyohesion.presentation.features.add_family_member.AddFamilyMemberScreen
 import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
@@ -37,6 +42,8 @@ import com.bemos.familyohesion.presentation.features.skills.SkillsScreen
 import com.bemos.familyohesion.presentation.features.skills.vm.factory.SkillsViewModelFactory
 import com.bemos.familyohesion.presentation.main_activity.util.bottomNavItems
 import com.bemos.familyohesion.ui.theme.FamilyСohesionTheme
+import com.bemos.familyohesion.ui.theme.RedAlpha03
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
@@ -151,16 +158,18 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(
-                            route = "finishSubSkill/{subSkillName}",
+                            route = "finishSubSkill/{subSkill}",
                             arguments = listOf(
-                                navArgument("subSkillName") {
+                                navArgument("subSkill") {
                                     type = NavType.StringType
                                 }
                             )
                         ) { navBackStackEntry ->
+                            val subSkillJson = navBackStackEntry.arguments?.getString("subSkill")
+                            val subSkill = Json.decodeFromString<SubSkill>(subSkillJson!!)
                             FinishSubSkillScreen(
                                 navController = navController,
-                                subSkillName = navBackStackEntry.arguments?.getString("subSkillName"),
+                                subSkill = subSkill,
                                 finishSubSkillViewModelFactory = finishSubSkillViewModelFactory
                             )
                         }

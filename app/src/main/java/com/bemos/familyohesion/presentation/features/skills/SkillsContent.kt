@@ -1,5 +1,6 @@
 package com.bemos.familyohesion.presentation.features.skills
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,9 +16,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -47,7 +50,7 @@ fun SkillsContent(
     skills: List<Skill>,
     subSkills: List<SubSkill>?,
     onSkillClick: (String) -> Unit,
-    onFinishSubSkill: (String) -> Unit
+    onFinishSubSkill: (SubSkill) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     var isBottomSheetVisible by remember {
@@ -60,6 +63,7 @@ fun SkillsContent(
     Column(
         Modifier
             .fillMaxSize()
+            .background(Color.White)
     ) {
         Row(
             Modifier
@@ -129,7 +133,7 @@ fun SkillsContent(
                                 if (!App.listOfSubSkills.contains(subSkill)) {
                                     App.listOfSubSkills.add(subSkill)
                                 } else {
-                                    onFinishSubSkill(it.name)
+                                    onFinishSubSkill(it)
                                 }
                             }
                         )

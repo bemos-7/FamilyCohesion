@@ -8,8 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bemos.familyohesion.presentation.app.App
 import com.bemos.familyohesion.presentation.features.skills.vm.SkillsViewModel
 import com.bemos.familyohesion.presentation.features.skills.vm.factory.SkillsViewModelFactory
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun SkillsScreen(
@@ -30,6 +33,7 @@ fun SkillsScreen(
     }
 
     Log.d("firebaseTest", categories.toString())
+    Log.d("AppCheck", App.endingSubSkills.toString())
 
     SkillsContent(
         categories = categories,
@@ -40,8 +44,9 @@ fun SkillsScreen(
                 skillId
             )
         },
-        onFinishSubSkill = { subSkillName ->
-            navController.navigate("finishSubSkill/${subSkillName}")
+        onFinishSubSkill = { subSkill ->
+            val subSkillJson = Json.encodeToString(subSkill)
+            navController.navigate("finishSubSkill/${subSkillJson}")
         }
     )
 }

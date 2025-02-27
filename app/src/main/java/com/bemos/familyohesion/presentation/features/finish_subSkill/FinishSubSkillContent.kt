@@ -1,5 +1,6 @@
 package com.bemos.familyohesion.presentation.features.finish_subSkill
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,32 +26,50 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bemos.familyohesion.R
 import com.bemos.familyohesion.domain.models.FamilyMember
+import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.presentation.features.finish_subSkill.util.ui.TimeUi
 import com.bemos.familyohesion.shared.utils.ui.button.CustomButton
 import com.bemos.familyohesion.ui.theme.LightGray
 import com.bemos.familyohesion.ui.theme.Red
 import com.bemos.familyohesion.ui.theme.RedAlpha03
+import com.google.api.Context
 
 @Composable
 fun FinishSubSkillContent(
-    subSkillName: String,
-    familyMembers: List<FamilyMember>
+    subSkill: SubSkill,
+    familyMembers: List<FamilyMember>,
+    onEndCLick: (SubSkill, Int) -> Unit
 ) {
+    val context = LocalContext.current
     var expanded by remember {
         mutableStateOf(false)
     }
     var dropMenuContent by remember {
         mutableStateOf("")
     }
+    var isPressedFirst by remember {
+        mutableStateOf(false)
+    }
+    var isPressedSecond by remember {
+        mutableStateOf(false)
+    }
+    var isPressedThird by remember {
+        mutableStateOf(false)
+    }
+    var isPressedFourth by remember {
+        mutableStateOf(false)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
     ) {
         Spacer(Modifier.height(22.dp))
         Row(
@@ -84,7 +103,7 @@ fun FinishSubSkillContent(
         ) {
             Text(
                 modifier = Modifier.width(340.dp),
-                text = subSkillName,
+                text = subSkill.name,
                 fontSize = 32.sp,
             )
             Spacer(Modifier.height(24.dp))
@@ -171,25 +190,51 @@ fun FinishSubSkillContent(
                     .fillMaxWidth()
             ) {
                 TimeUi(
-                    time = 30
+                    time = 30,
+                    isPressed = isPressedFirst,
+                    onClick = {
+                        isPressedFirst = !isPressedFirst
+                    }
                 )
                 Spacer(Modifier.width(12.dp))
                 TimeUi(
-                    time = 60
+                    time = 60,
+                    isPressed = isPressedSecond,
+                    onClick = {
+                        isPressedSecond = !isPressedSecond
+                    }
                 )
                 Spacer(Modifier.width(12.dp))
                 TimeUi(
-                    time = 90
+                    time = 90,
+                    isPressed = isPressedThird,
+                    onClick = {
+                        isPressedThird = !isPressedThird
+                    }
                 )
                 Spacer(Modifier.width(12.dp))
                 TimeUi(
-                    time = 120
+                    time = 120,
+                    isPressed = isPressedFourth,
+                    onClick = {
+                        isPressedFourth = !isPressedFourth
+                    }
                 )
             }
             Spacer(Modifier.height(24.dp))
             CustomButton(
                 onClick = {
-
+                    calculateTime(
+                        context = context,
+                        dropMenuContent = dropMenuContent,
+                        firstIntervalMinutes = isPressedFirst,
+                        secondIntervalMinutes = isPressedSecond,
+                        thirdIntervalMinutes = isPressedThird,
+                        fourthIntervalMinutes = isPressedFourth,
+                        onEndCLick = { time ->
+                            onEndCLick(subSkill, time)
+                        }
+                    )
                 },
                 content = "Завершить"
             )
@@ -197,17 +242,46 @@ fun FinishSubSkillContent(
     }
 }
 
+fun calculateTime(
+    context: android.content.Context,
+    dropMenuContent: String,
+    firstIntervalMinutes: Boolean,
+    secondIntervalMinutes: Boolean,
+    thirdIntervalMinutes: Boolean,
+    fourthIntervalMinutes: Boolean,
+    onEndCLick: (Int) -> Unit,
+) {
+    if (dropMenuContent.isNotEmpty()) {
+        val time = listOf(
+            if (firstIntervalMinutes) 30 else 0,
+            if (secondIntervalMinutes) 60 else 0,
+            if (thirdIntervalMinutes) 90 else 0,
+            if (fourthIntervalMinutes) 120 else 0
+        ).sum()
+        if (time != 0) {
+            onEndCLick(time)
+        } else {
+            Toast.makeText(context, "Выберите проведенное время", Toast.LENGTH_SHORT).show()
+        }
+    } else {
+        Toast.makeText(context, "Выберите члена семьи", Toast.LENGTH_SHORT).show()
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun FinishSubSkillContentPreview() {
     FinishSubSkillContent(
-        "Приготовить пеперони",
+        SubSkill(),
         familyMembers = listOf(
             FamilyMember(
                 name = "Some",
                 relation = "Something",
                 points = 0.0
             )
-        )
+        ),
+        onEndCLick = { string, int ->
+
+        }
     )
 }

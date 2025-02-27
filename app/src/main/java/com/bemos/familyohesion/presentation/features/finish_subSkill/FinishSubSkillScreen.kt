@@ -5,16 +5,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bemos.familyohesion.domain.models.SubSkill
+import com.bemos.familyohesion.presentation.app.App
 import com.bemos.familyohesion.presentation.features.finish_subSkill.vm.FinishSubSkillViewModel
 import com.bemos.familyohesion.presentation.features.finish_subSkill.vm.factory.FinishSubSkillViewModelFactory
 
 @Composable
 fun FinishSubSkillScreen(
     navController: NavController,
-    subSkillName: String?,
+    subSkill: SubSkill?,
     finishSubSkillViewModelFactory: FinishSubSkillViewModelFactory
 ) {
-
     val viewModel = viewModel<FinishSubSkillViewModel>(
         factory = finishSubSkillViewModelFactory
     )
@@ -22,7 +23,13 @@ fun FinishSubSkillScreen(
     val familyMembers by viewModel.onResult.collectAsState()
 
     FinishSubSkillContent(
-        subSkillName = subSkillName!!,
-        familyMembers = familyMembers
+        subSkill = subSkill!!,
+        familyMembers = familyMembers,
+        onEndCLick = { subSkillFinish, time ->
+            App.endingSubSkills.add(
+                Pair(subSkillFinish, time)
+            )
+            navController.navigate("skills")
+        }
     )
 }

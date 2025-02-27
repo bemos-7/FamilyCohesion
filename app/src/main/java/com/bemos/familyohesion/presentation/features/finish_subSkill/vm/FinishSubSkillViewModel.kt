@@ -41,9 +41,7 @@ class FinishSubSkillViewModel @Inject constructor(
                 getFamilyMembers(
                     user.familyId,
                     onResult = { members ->
-                        _onResult.update {
-                            members
-                        }
+                        removingCurrentUser(members)
                     }
                 )
             },
@@ -63,5 +61,19 @@ class FinishSubSkillViewModel @Inject constructor(
             familyId = familyId,
             onResult = onResult
         )
+    }
+
+    private fun removingCurrentUser(
+        familyMembers: List<FamilyMember>
+    ) {
+        val familyMembersList = mutableListOf<FamilyMember>()
+        familyMembers.forEach { member ->
+            if (member.name != _onComplete.value.name && member.relation != _onComplete.value.role) {
+                familyMembersList.add(member)
+            }
+        }
+        _onResult.update {
+            familyMembersList
+        }
     }
 }
