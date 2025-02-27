@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("com.google.gms.google-services")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 android {
@@ -77,4 +79,5 @@ dependencies {
     implementation (libs.dagger)
     kapt (libs.dagger.compiler)
     implementation(libs.androidx.navigation.compose)
+    implementation (libs.kotlinx.serialization.json)
 }
