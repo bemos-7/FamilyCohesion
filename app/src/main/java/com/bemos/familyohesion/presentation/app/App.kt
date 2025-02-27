@@ -14,6 +14,7 @@ class App : Application() {
 
     companion object {
         var listOfSubSkills = mutableStateListOf<SubSkill>()
+        var endingSubSkills = mutableStateListOf<Pair<SubSkill, Int>>()
     }
 
     override fun onCreate() {
