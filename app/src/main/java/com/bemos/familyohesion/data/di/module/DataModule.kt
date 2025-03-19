@@ -4,14 +4,18 @@ import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseAuth
 import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseFirestoreImpl
 import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
 import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
+import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
+import com.bemos.familyohesion.domain.use_cases.GetCurrentUserIdUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
+import com.bemos.familyohesion.domain.use_cases.SendPasswordResetEmailUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateUserDetailsUseCase
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -133,6 +137,42 @@ class DataModule {
     ): GetSubSkillsUseCase {
         return GetSubSkillsUseCase(
             repository = firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun getCurrentUserIdUseCase(
+        firebaseAuthRepository: FirebaseAuthRepository
+    ): GetCurrentUserIdUseCase {
+        return GetCurrentUserIdUseCase(
+            repository = firebaseAuthRepository
+        )
+    }
+
+    @Provides
+    fun deleteUserUseCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): DeleteUserUseCase {
+        return DeleteUserUseCase(
+            repository = firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun updateUserDetailsUserCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): UpdateUserDetailsUseCase {
+        return UpdateUserDetailsUseCase(
+            repository = firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun provideSendPasswordResetEmailUseCase(
+        firebaseAuthRepository: FirebaseAuthRepository
+    ): SendPasswordResetEmailUseCase {
+        return SendPasswordResetEmailUseCase(
+            firebaseAuthRepository = firebaseAuthRepository
         )
     }
 }

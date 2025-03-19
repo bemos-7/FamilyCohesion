@@ -1,22 +1,27 @@
 package com.bemos.familyohesion.presentation.di.module
 
+import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
+import com.bemos.familyohesion.domain.use_cases.GetCurrentUserIdUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
+import com.bemos.familyohesion.domain.use_cases.SendPasswordResetEmailUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateUserDetailsUseCase
 import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
+import com.bemos.familyohesion.presentation.features.edit_profile.vm.factory.EditProfileViewModelFactory
 import com.bemos.familyohesion.presentation.features.finish_subSkill.vm.factory.FinishSubSkillViewModelFactory
 import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_up.vm.factory.SignUpViewModelFactory
 import com.bemos.familyohesion.presentation.features.skills.vm.factory.SkillsViewModelFactory
+import com.bemos.familyohesion.presentation.main_activity.vm.factory.MainViewModelFactory
 import dagger.Module
 import dagger.Provides
-import kotlin.math.sign
 
 @Module
 class AppModule {
@@ -42,11 +47,13 @@ class AppModule {
     @Provides
     fun provideProfileViewModelFactory(
         getUserDataUseCase: GetUserDataUseCase,
-        getFamilyMembersUseCase: GetFamilyMembersUseCase
+        getFamilyMembersUseCase: GetFamilyMembersUseCase,
+        deleteUserUseCase: DeleteUserUseCase
     ): ProfileViewModelFactory {
         return ProfileViewModelFactory(
             getUserDataUseCase = getUserDataUseCase,
-            getFamilyMembersUseCase = getFamilyMembersUseCase
+            getFamilyMembersUseCase = getFamilyMembersUseCase,
+            deleteUserUseCase = deleteUserUseCase
         )
     }
 
@@ -80,6 +87,26 @@ class AppModule {
         return FinishSubSkillViewModelFactory(
             getUserDataUseCase = getUserDataUseCase,
             getFamilyMembersUseCase = getFamilyMembersUseCase
+        )
+    }
+
+    @Provides
+    fun provideMainViewModelFactory(
+        getCurrentUserIdUseCase: GetCurrentUserIdUseCase
+    ): MainViewModelFactory {
+        return MainViewModelFactory(
+            getCurrentUserIdUseCase = getCurrentUserIdUseCase
+        )
+    }
+
+    @Provides
+    fun provideEditProfileViewModelFactory(
+        updateUserDetailsUseCase: UpdateUserDetailsUseCase,
+        sendPasswordResetEmailUseCase: SendPasswordResetEmailUseCase
+    ): EditProfileViewModelFactory {
+        return EditProfileViewModelFactory(
+            updateUserDetailsUseCase = updateUserDetailsUseCase,
+            sendPasswordResetEmailUseCase = sendPasswordResetEmailUseCase
         )
     }
 
