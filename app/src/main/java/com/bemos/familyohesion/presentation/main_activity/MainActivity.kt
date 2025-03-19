@@ -4,23 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,8 +39,12 @@ import com.bemos.familyohesion.presentation.features.sign_up.vm.factory.SignUpVi
 import com.bemos.familyohesion.presentation.features.skills.SkillsScreen
 import com.bemos.familyohesion.presentation.features.skills.vm.factory.SkillsViewModelFactory
 import com.bemos.familyohesion.presentation.main_activity.util.bottomNavItems
-import com.bemos.familyohesion.ui.theme.FamilyСohesionTheme
-import com.bemos.familyohesion.ui.theme.RedAlpha03
+import com.bemos.familyohesion.presentation.main_activity.vm.MainViewModel
+import com.bemos.familyohesion.presentation.main_activity.vm.factory.MainViewModelFactory
+import com.bemos.familyohesion.core.ui.theme.FamilyСohesionTheme
+import com.bemos.familyohesion.domain.models.User
+import com.bemos.familyohesion.presentation.features.edit_profile.EditProfileScreen
+import com.bemos.familyohesion.presentation.features.edit_profile.vm.factory.EditProfileViewModelFactory
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -65,12 +67,23 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var finishSubSkillViewModelFactory: FinishSubSkillViewModelFactory
 
+    @Inject
+    lateinit var editProfileViewModelFactory: EditProfileViewModelFactory
+
+    @Inject
+    lateinit var mainViewModelFactory: MainViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.inject(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             FamilyСohesionTheme {
+                val mainViewModel = viewModel<MainViewModel>(
+                    factory = mainViewModelFactory
+                )
+                val currentUser by mainViewModel.onResult.collectAsState()
+                val startNav = if (currentUser.isNotEmpty()) "skills" else "signIn"
                 var selectedItemIndex by rememberSaveable {
                     mutableStateOf(0)
                 }
@@ -110,7 +123,7 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         modifier = Modifier.padding(it),
                         navController = navController,
-                        startDestination = "skills"
+                        startDestination = startNav
                     ) {
                         composable(
                             route = "signUp"
@@ -133,6 +146,22 @@ class MainActivity : ComponentActivity() {
                             ProfileScreen(
                                 navController = navController,
                                 profileViewModelFactory = profileViewModelFactory
+                            )
+                        }
+                        composable(
+                            route = "editProfile/{user}",
+                            arguments = listOf(
+                                navArgument("user") {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) { navBackStackEntry ->
+                            val userJson = navBackStackEntry.arguments?.getString("user")
+                            val user = Json.decodeFromString<User>(userJson.toString())
+                            EditProfileScreen(
+                                navController = navController,
+                                user = user,
+                                editProfileViewModelFactory = editProfileViewModelFactory
                             )
                         }
                         composable(
