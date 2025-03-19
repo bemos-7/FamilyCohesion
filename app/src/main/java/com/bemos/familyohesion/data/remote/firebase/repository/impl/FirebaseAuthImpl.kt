@@ -85,6 +85,7 @@ class FirebaseAuthImpl(
 
                     firebaseFirestore.runBatch { batch ->
                         val newMember = mapOf(
+                            "userId" to userId,
                             "name" to userAuth.name,
                             "points" to 0,
                             "relation" to userAuth.userRole
@@ -417,6 +418,24 @@ class FirebaseAuthImpl(
 //                    .addOnFailureListener { e -> println("Ошибка: ${e.message}") }
 //            }
 //        }
+    }
+
+    override fun sendPasswordResetEmail(
+        email: String,
+        onComplete: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        firebaseAuth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onComplete()
+                } else {
+                    onFailure(task.exception ?: Exception("Failed to send password reset email"))
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
     }
 
 }

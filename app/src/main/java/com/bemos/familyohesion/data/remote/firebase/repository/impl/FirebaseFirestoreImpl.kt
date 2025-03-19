@@ -40,8 +40,9 @@ class FirebaseFirestoreImpl(
                         val name = member["name"] as? String
                         val relation = member["relation"] as? String
                         val points = (member["points"] as? Number)?.toDouble() ?: 0.0
+                        val userId = member["userId"] as? String ?: ""
                         if (name != null && relation != null) {
-                            FamilyMember(name, relation, points)
+                            FamilyMember(name, relation, points, userId)
                         } else {
                             null
                         }
@@ -103,5 +104,93 @@ class FirebaseFirestoreImpl(
                 onComplete(subSkills)
             }
             .addOnFailureListener(onFailure)
+    }
+
+    override fun deleteUser(
+        userId: String,
+        onComplete: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        // Удаление пользователя из families
+        firestore.collection("families")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (familyDocument in querySnapshot.documents) {
+                    val members = familyDocument.get("members") as? List<Map<String, Any>> ?: emptyList()
+
+                    // Удаление пользователя из массива
+                    val updatedMembers = members.filterNot { it["userId"] == userId }
+
+                    // Обновляем массив без удалённого пользователя
+                    familyDocument.reference.update("members", updatedMembers)
+                        .addOnFailureListener { exception ->
+                            onFailure(exception)
+                        }
+                }
+
+                // Удаление пользователя из users
+                firestore.collection("users").document(userId).delete()
+                    .addOnSuccessListener {
+                        // Удаление аккаунта из Firebase Auth
+                        val user = auth.currentUser
+                        if (user?.uid == userId) {
+                            user.delete().addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    onComplete()
+                                } else {
+                                    onFailure(task.exception ?: Exception("Failed to delete user account"))
+                                }
+                            }
+                        } else {
+                            onComplete()
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        onFailure(exception)
+                    }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
+    override fun updateUserDetails(
+        userId: String,
+        newEmail: String,
+        newName: String,
+        onComplete: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        // Обновление имени и почты в Firestore
+        val userRef = firestore.collection("users").document(userId)
+
+        firestore.runTransaction { transaction ->
+            val userDoc = transaction.get(userRef)
+            if (userDoc.exists()) {
+                // Обновляем имя и почту
+                transaction.update(userRef, "name", newName, "email", newEmail)
+            } else {
+                throw Exception("User not found")
+            }
+        }.addOnSuccessListener {
+            // Обновляем почту в Firebase Authentication
+            val user = auth.currentUser
+            if (user?.email != newEmail) {
+                if (user != null) {
+                    user.updateEmail(newEmail).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Почта успешно обновлена
+                            onComplete()
+                        } else {
+                            onFailure(task.exception ?: Exception("Failed to update email in Firebase Authentication"))
+                        }
+                    }
+                }
+            } else {
+                onComplete()
+            }
+        }.addOnFailureListener { exception ->
+            onFailure(exception)
+        }
     }
 }
