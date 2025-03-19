@@ -47,6 +47,9 @@ fun SkillsScreen(
         onFinishSubSkill = { subSkill ->
             val subSkillJson = Json.encodeToString(subSkill)
             navController.navigate("finishSubSkill/${subSkillJson}")
+        },
+        selectedCategory = { skill ->
+            viewModel.getSkills(skill.id)
         }
     )
 }

@@ -2,6 +2,7 @@ package com.bemos.familyohesion.presentation.features.skills
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,6 +41,8 @@ import com.bemos.familyohesion.domain.models.Category
 import com.bemos.familyohesion.domain.models.Skill
 import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.presentation.app.App
+import com.bemos.familyohesion.presentation.features.skills.utils.ui.DropDownMenuCustom
+import com.bemos.familyohesion.presentation.features.skills.utils.ui.DropDownMenuItem
 import com.bemos.familyohesion.presentation.features.skills.utils.ui.SkillUi
 import com.bemos.familyohesion.presentation.features.skills.utils.ui.SubSkillUi
 
@@ -50,7 +53,8 @@ fun SkillsContent(
     skills: List<Skill>,
     subSkills: List<SubSkill>?,
     onSkillClick: (String) -> Unit,
-    onFinishSubSkill: (SubSkill) -> Unit
+    onFinishSubSkill: (SubSkill) -> Unit,
+    selectedCategory: (Category) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     var isBottomSheetVisible by remember {
@@ -59,55 +63,73 @@ fun SkillsContent(
     var bottomSheetSkill by remember {
         mutableStateOf("")
     }
-
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-        ) {
-
-            Text(
-                text = if (categories.isNotEmpty()) categories[0].name else "loading...",
-                fontSize = 20.sp
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.points),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-                Spacer(modifier = Modifier.width(1.dp))
-                Text(
-                    text = "200",
-                    fontSize = 20.sp
-                )
-            }
-        }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(items = skills) {
-                SkillUi(
-                    skill = it,
-                    onClick = { id ->
-                        onSkillClick(id)
-                        isBottomSheetVisible = true
-                        bottomSheetSkill = it.name
-                    }
-                )
-            }
-        }
+    var isVisible by remember {
+        mutableStateOf(false)
     }
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.points),
+                        contentDescription = null,
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.width(1.dp))
+                    Text(
+                        text = "200",
+                        fontSize = 20.sp
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+                items(items = skills) {
+                    SkillUi(
+                        skill = it,
+                        onClick = { id ->
+                            onSkillClick(id)
+                            isBottomSheetVisible = true
+                            bottomSheetSkill = it.name
+                        }
+                    )
+                }
+            }
+        }
+        DropDownMenuCustom(
+            isVisible = isVisible,
+            isVisibleChange = {
+                isVisible = !isVisible
+            },
+            categories = categories,
+            selectedCategory = {
+                selectedCategory(it)
+            },
+            modifier = Modifier
+                .align(
+                    Alignment.TopStart
+                )
+                .padding(start = 16.dp)
+        )
+    }
+
     if (isBottomSheetVisible) {
         ModalBottomSheet(
             onDismissRequest = {
@@ -177,6 +199,7 @@ private fun SkillsContentPreview() {
         ),
         subSkills = listOf(),
         onSkillClick = {},
-        onFinishSubSkill = {}
+        onFinishSubSkill = {},
+        selectedCategory = {}
     )
 }

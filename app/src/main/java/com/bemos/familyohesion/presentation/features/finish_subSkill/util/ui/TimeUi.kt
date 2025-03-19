@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bemos.familyohesion.ui.theme.Red
+import com.bemos.familyohesion.core.ui.theme.Red
 
 @Composable
 fun TimeUi(

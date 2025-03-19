@@ -1,6 +1,7 @@
 package com.bemos.familyohesion.presentation.features.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,14 +39,16 @@ import com.bemos.familyohesion.domain.models.User
 import com.bemos.familyohesion.presentation.features.profile.utils.ui.FamilyMemberRatingUi
 import com.bemos.familyohesion.presentation.features.profile.utils.ui.FamilyMemberUi
 import com.bemos.familyohesion.shared.utils.ui.button.CustomButton
-import com.bemos.familyohesion.ui.theme.Red
-import com.bemos.familyohesion.ui.theme.White
+import com.bemos.familyohesion.core.ui.theme.Red
+import com.bemos.familyohesion.core.ui.theme.White
 
 @Composable
 fun ProfileContent(
     user: User,
     familyMembers: List<FamilyMember>,
-    onFamilyMemberAdd: (String) -> Unit
+    onFamilyMemberAdd: (String) -> Unit,
+    onDeleteUserClick: (String) -> Unit,
+    onEditProfileClick: (User) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -102,6 +105,9 @@ fun ProfileContent(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
+                            modifier = Modifier.clickable {
+                                onEditProfileClick(user)
+                            },
                             text = "Изменить",
                             color = Red,
                             fontSize = 16.sp
@@ -167,7 +173,10 @@ fun ProfileContent(
                 ) {
                     FamilyMemberUi(
                         familyMember = it,
-                        currentUserName = user.name
+                        currentUserName = user.name,
+                        onDeleteClick = { userId ->
+                            onDeleteUserClick(userId)
+                        }
                     )
                 }
 
@@ -230,6 +239,8 @@ fun ProfileContentPreview(modifier: Modifier = Modifier) {
                 12.222
             ),
         ),
-        onFamilyMemberAdd = {}
+        onFamilyMemberAdd = {},
+        onDeleteUserClick = {},
+        onEditProfileClick = {}
     )
 }

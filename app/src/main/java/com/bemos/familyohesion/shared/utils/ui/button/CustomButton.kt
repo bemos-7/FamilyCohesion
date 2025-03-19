@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.bemos.familyohesion.ui.theme.Red
+import com.bemos.familyohesion.core.ui.theme.Red
 
 @Composable
 fun CustomButton(

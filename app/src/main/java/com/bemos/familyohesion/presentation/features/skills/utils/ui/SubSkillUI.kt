@@ -36,7 +36,7 @@ import com.bemos.familyohesion.R
 import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.presentation.app.App
 import com.bemos.familyohesion.presentation.app.App.Companion.listOfSubSkills
-import com.bemos.familyohesion.ui.theme.RedAlpha03
+import com.bemos.familyohesion.core.ui.theme.RedAlpha03
 
 @Composable
 fun SubSkillUi(

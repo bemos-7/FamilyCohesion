@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bemos.familyohesion.domain.models.Skill
-import com.bemos.familyohesion.ui.theme.RedAlpha03
+import com.bemos.familyohesion.core.ui.theme.RedAlpha03
 
 @Composable
 fun SkillUi(

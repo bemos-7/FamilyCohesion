@@ -36,9 +36,9 @@ import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.presentation.features.finish_subSkill.util.ui.TimeUi
 import com.bemos.familyohesion.shared.utils.ui.button.CustomButton
-import com.bemos.familyohesion.ui.theme.LightGray
-import com.bemos.familyohesion.ui.theme.Red
-import com.bemos.familyohesion.ui.theme.RedAlpha03
+import com.bemos.familyohesion.core.ui.theme.LightGray
+import com.bemos.familyohesion.core.ui.theme.Red
+import com.bemos.familyohesion.core.ui.theme.RedAlpha03
 import com.google.api.Context
 
 @Composable
