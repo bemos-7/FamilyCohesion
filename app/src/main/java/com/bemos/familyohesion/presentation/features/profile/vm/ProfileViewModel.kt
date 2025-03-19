@@ -3,6 +3,7 @@ package com.bemos.familyohesion.presentation.features.profile.vm
 import androidx.lifecycle.ViewModel
 import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.User
+import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 class ProfileViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val getFamilyMembersUseCase: GetFamilyMembersUseCase
+    private val getFamilyMembersUseCase: GetFamilyMembersUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase
 ) : ViewModel() {
 
     private val _onComplete = MutableStateFlow(
@@ -21,6 +23,11 @@ class ProfileViewModel @Inject constructor(
         )
     )
     val onComplete: StateFlow<User> get() = _onComplete
+
+    private val _onDeleteComplete = MutableStateFlow(
+        false
+    )
+    val onDeleteComplete: StateFlow<Boolean> get() = _onDeleteComplete
 
     private val _onResult = MutableStateFlow<List<FamilyMember>>(listOf())
     val onResult: StateFlow<List<FamilyMember>> get() = _onResult
@@ -32,7 +39,7 @@ class ProfileViewModel @Inject constructor(
         getUserData()
     }
 
-    private fun getUserData() {
+    fun getUserData() {
         getUserDataUseCase.execute(
             onComplete = { user ->
                 _onComplete.update {
@@ -62,6 +69,24 @@ class ProfileViewModel @Inject constructor(
         getFamilyMembersUseCase.execute(
             familyId = familyId,
             onResult = onResult
+        )
+    }
+
+    fun deleteUser(
+        userId: String
+    ) {
+        deleteUserUseCase.execute(
+            userId = userId,
+            onComplete = {
+                _onDeleteComplete.update {
+                    true
+                }
+            },
+            onFailure = { e ->
+                _onFailure.update {
+                    e
+                }
+            }
         )
     }
 }
