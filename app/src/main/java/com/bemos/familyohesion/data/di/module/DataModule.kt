@@ -1,20 +1,31 @@
 package com.bemos.familyohesion.data.di.module
 
+import android.content.Context
+import androidx.room.Room
+import com.bemos.familyohesion.data.local.dao.CategoryDao
+import com.bemos.familyohesion.data.local.dao.SkillDao
+import com.bemos.familyohesion.data.local.dao.SubSkillDao
+import com.bemos.familyohesion.data.local.dao.impl.DaoRepositoryImpl
+import com.bemos.familyohesion.data.local.db.Database
 import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseAuthImpl
 import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseFirestoreImpl
+import com.bemos.familyohesion.domain.repositories.DaoRepository
 import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
 import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
 import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
+import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCurrentUserIdUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
+import com.bemos.familyohesion.domain.use_cases.InsertSubSkillRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.SendPasswordResetEmailUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateSubSkillRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.UpdateUserDetailsUseCase
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -44,6 +55,50 @@ class DataModule {
         firebase: Firebase
     ): FirebaseFirestore {
         return firebase.firestore
+    }
+
+    @Provides
+    fun provideDatabase(
+        context: Context
+    ) : Database {
+        return Room.databaseBuilder(
+            context,
+            Database::class.java, "db"
+        ).build()
+    }
+
+    @Provides
+    fun provideCategoryDao(
+        database: Database
+    ): CategoryDao {
+        return database.categoryDao()
+    }
+
+    @Provides
+    fun provideSkillDao(
+        database: Database
+    ): SkillDao {
+        return database.skillDao()
+    }
+
+    @Provides
+    fun provideSubSkillDao(
+        database: Database
+    ): SubSkillDao {
+        return database.subSkillDao()
+    }
+
+    @Provides
+    fun provideDaoRepositoryImpl(
+        categoryDao: CategoryDao,
+        skillDao: SkillDao,
+        subSkillDao: SubSkillDao
+    ): DaoRepository {
+        return DaoRepositoryImpl(
+            categoryDao = categoryDao,
+            skillDao = skillDao,
+            subSkillDao = subSkillDao
+        )
     }
 
     @Provides
@@ -173,6 +228,33 @@ class DataModule {
     ): SendPasswordResetEmailUseCase {
         return SendPasswordResetEmailUseCase(
             firebaseAuthRepository = firebaseAuthRepository
+        )
+    }
+
+    @Provides
+    fun provideGetAllSubSkillsRoomUseCase(
+        daoRepository: DaoRepository
+    ): GetAllSubSkillsRoomUseCase {
+        return GetAllSubSkillsRoomUseCase(
+            daoRepository
+        )
+    }
+
+    @Provides
+    fun provideUpdateSubSkillsRoomUseCase(
+        daoRepository: DaoRepository
+    ): UpdateSubSkillRoomUseCase {
+        return UpdateSubSkillRoomUseCase(
+            daoRepository
+        )
+    }
+
+    @Provides
+    fun provideInsertSubSkillRoomUseCase(
+        daoRepository: DaoRepository
+    ): InsertSubSkillRoomUseCase {
+        return InsertSubSkillRoomUseCase(
+            daoRepository
         )
     }
 }

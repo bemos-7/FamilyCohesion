@@ -1,16 +1,19 @@
 package com.bemos.familyohesion.presentation.di.module
 
 import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
+import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCurrentUserIdUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
+import com.bemos.familyohesion.domain.use_cases.InsertSubSkillRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.SendPasswordResetEmailUseCase
 import com.bemos.familyohesion.domain.use_cases.SignInUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateSubSkillRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.UpdateUserDetailsUseCase
 import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
 import com.bemos.familyohesion.presentation.features.edit_profile.vm.factory.EditProfileViewModelFactory
@@ -70,23 +73,29 @@ class AppModule {
     fun provideSkillsViewModelFactory(
         getCategoriesUseCase: GetCategoriesUseCase,
         getSkillsUseCase: GetSkillsUseCase,
-        getSubSkillsUseCase: GetSubSkillsUseCase
+        getSubSkillsUseCase: GetSubSkillsUseCase,
+        getAllSubSkillsRoomUseCase: GetAllSubSkillsRoomUseCase,
+        insertSubSkillRoomUseCase: InsertSubSkillRoomUseCase
     ): SkillsViewModelFactory {
         return SkillsViewModelFactory(
             getCategoriesUseCase = getCategoriesUseCase,
             getSkillsUseCase = getSkillsUseCase,
-            getSubSkillsUseCase = getSubSkillsUseCase
+            getSubSkillsUseCase = getSubSkillsUseCase,
+            getAllSubSkillsRoomUseCase = getAllSubSkillsRoomUseCase,
+            insertSubSkillRoomUseCase = insertSubSkillRoomUseCase
         )
     }
 
     @Provides
     fun provideFinishSubSkillViewModelFactory(
         getUserDataUseCase: GetUserDataUseCase,
-        getFamilyMembersUseCase: GetFamilyMembersUseCase
+        getFamilyMembersUseCase: GetFamilyMembersUseCase,
+        updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase
     ): FinishSubSkillViewModelFactory {
         return FinishSubSkillViewModelFactory(
             getUserDataUseCase = getUserDataUseCase,
-            getFamilyMembersUseCase = getFamilyMembersUseCase
+            getFamilyMembersUseCase = getFamilyMembersUseCase,
+            updateSubSkillRoomUseCase = updateSubSkillRoomUseCase
         )
     }
 
