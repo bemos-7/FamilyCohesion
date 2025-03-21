@@ -3,9 +3,10 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("com.google.gms.google-services")
+    id("com.google.devtools.ksp")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-    kotlin("plugin.serialization") version "2.1.10"
+    kotlin("plugin.serialization") version "2.1.20"
 }
 
 android {
@@ -80,4 +81,7 @@ dependencies {
     kapt (libs.dagger.compiler)
     implementation(libs.androidx.navigation.compose)
     implementation (libs.kotlinx.serialization.json)
+    implementation(libs.androidx.room.runtime)
+    ksp (libs.androidx.room.compiler)
+    implementation (libs.androidx.room.ktx)
 }
