@@ -26,9 +26,7 @@ fun FinishSubSkillScreen(
         subSkill = subSkill!!,
         familyMembers = familyMembers,
         onEndCLick = { subSkillFinish, time ->
-            App.endingSubSkills.add(
-                Pair(subSkillFinish, time)
-            )
+            viewModel.updateSubSkillInRoom(subSkillFinish)
             navController.navigate("skills")
         }
     )

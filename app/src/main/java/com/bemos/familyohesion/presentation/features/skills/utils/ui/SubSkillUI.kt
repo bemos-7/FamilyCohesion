@@ -41,101 +41,50 @@ import com.bemos.familyohesion.core.ui.theme.RedAlpha03
 @Composable
 fun SubSkillUi(
     subSkill: SubSkill,
+    localSubSkill: List<SubSkill>,
     onEventClick: (SubSkill) -> Unit
 ) {
     val context = LocalContext.current
-    val listOfSubSkills by remember { mutableStateOf(App.listOfSubSkills) }
 
-//    Card(
-//        modifier = Modifier
-//            .height(50.dp)
-//            .fillMaxWidth(),
-//        colors = CardDefaults.cardColors(
-//            containerColor = Color.White
-//        ),
-//        border = BorderStroke(
-//            width = 1.dp,
-//            color = RedAlpha03
-//        ),
-//        shape = RoundedCornerShape(
-//            14.dp
-//        )
-//    ) {
-//        Column(
-//            modifier = Modifier.fillMaxHeight(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(horizontal = 16.dp)
-//            ) {
-//                Text(
-//                    modifier = Modifier
-//                        .weight(1f)
-//                        .clickable {
-//                            Toast.makeText(context, subSkill.name, Toast.LENGTH_SHORT).show()
-//                        },
-//                    text = subSkill.name,
-//                    softWrap = false,
-//                )
-//                Row(
-//                    modifier = Modifier.weight(1f),
-//                    horizontalArrangement = Arrangement.Center
-//                ) {
-//                    Icon(
-//                        painter = painterResource(
-//                            id = R.drawable.points_fill
-//                        ),
-//                        contentDescription = null,
-//                        tint = Color.Unspecified
-//                    )
-//                    Spacer(Modifier.width(2.dp))
-//                    Text(
-//                        text = subSkill.points.toString()
-//                    )
-//                }
-//                Text(
-//                    text = if (listOfSubSkills.contains(subSkill)) "Завершить" else "Начать",
-//                    modifier = Modifier.clickable {
-//                        onEventClick(subSkill)
-//                    }
-//                )
-//            }
-//        }
-//    }
+    localSubSkill.find { it.id == subSkill.id }?.let { local ->
+        if (local.isCompleted) {
+            SubSkillUiState(
+                subSkill,
+                localSubSkill,
+                context = context,
+                alpha = 0.3f,
+                onEventClick = {
 
-    if (App.endingSubSkills.any { (endingSubSkill, _)->
-        endingSubSkill == subSkill
-    }) {
-        SubSkillUiState(
-            subSkill,
-            context = context,
-            alpha = 0.3f,
-            onEventClick = {
-
-            }
-        )
-    } else {
-        SubSkillUiState(
-            subSkill,
-            context = context,
-            onEventClick = {
-                onEventClick(it)
-            }
-        )
-    }
+                }
+            )
+        } else {
+            SubSkillUiState(
+                subSkill,
+                localSubSkill,
+                context = context,
+                onEventClick = {
+                    onEventClick(it)
+                }
+            )
+        }
+    } ?: SubSkillUiState(
+        subSkill,
+        localSubSkill,
+        context = context,
+        onEventClick = {
+            onEventClick(it)
+        }
+    )
 }
 
 @Composable
 fun SubSkillUiState(
     subSkill: SubSkill,
+    localSubSkill: List<SubSkill>,
     context: Context,
     alpha: Float = 100f,
     onEventClick: (SubSkill) -> Unit
 ) {
-    val checkAlpha = alpha == 0.3f
     Card(
         modifier = Modifier
             .height(50.dp)
@@ -188,7 +137,11 @@ fun SubSkillUiState(
                     )
                 }
                 Text(
-                    text = if (listOfSubSkills.contains(subSkill)) "Завершить" else if (checkAlpha) "Выполнено" else "Начать",
+                    text = when {
+                        localSubSkill.contains(subSkill) -> "Завершить"
+                        alpha < 100f -> "Выполнено"
+                        else -> "Начать"
+                    },
                     modifier = Modifier.clickable {
                         onEventClick(subSkill)
                     }
@@ -208,6 +161,7 @@ private fun SubSkillUiStatePreview() {
             points = 2,
             skillId = ""
         ),
+        localSubSkill = listOf(),
         context = LocalContext.current,
         alpha = 0.3f,
         onEventClick = {
@@ -227,6 +181,12 @@ private fun SubSkillUiPreview() {
         ),
         onEventClick = {
 
-        }
+        },
+        localSubSkill = listOf(SubSkill(
+            id = "",
+            name = "Приготовить пеперо3ни",
+            points = 2,
+            skillId = ""
+        ))
     )
 }

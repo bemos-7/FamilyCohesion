@@ -1,18 +1,23 @@
 package com.bemos.familyohesion.presentation.features.finish_subSkill.vm
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bemos.familyohesion.domain.models.FamilyMember
+import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.domain.models.User
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateSubSkillRoomUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class FinishSubSkillViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val getFamilyMembersUseCase: GetFamilyMembersUseCase
+    private val getFamilyMembersUseCase: GetFamilyMembersUseCase,
+    private val updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase
 ) : ViewModel() {
 
     private val _onComplete = MutableStateFlow(
@@ -75,5 +80,9 @@ class FinishSubSkillViewModel @Inject constructor(
         _onResult.update {
             familyMembersList
         }
+    }
+
+    fun updateSubSkillInRoom(subSkill: SubSkill) = viewModelScope.launch {
+        updateSubSkillRoomUseCase.execute(subSkill)
     }
 }

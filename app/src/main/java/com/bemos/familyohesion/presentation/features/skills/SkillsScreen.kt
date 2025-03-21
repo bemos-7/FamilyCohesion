@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bemos.familyohesion.presentation.app.App
@@ -26,10 +25,12 @@ fun SkillsScreen(
     val categories by viewModel.onCategoryComplete.collectAsState()
     val skills by viewModel.onSkillsComplete.collectAsState()
     val subSkills by viewModel.onSubSkillsComplete.collectAsState()
+    val subSkillsFromRoom by viewModel.subSkillRoom.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getCategory()
         viewModel.getSkills("category1")
+        viewModel.getAllSubSkillsFromRoom()
     }
 
     Log.d("firebaseTest", categories.toString())
@@ -39,6 +40,7 @@ fun SkillsScreen(
         categories = categories,
         skills = skills,
         subSkills = subSkills,
+        localSubSkills = subSkillsFromRoom,
         onSkillClick = { skillId ->
             viewModel.getSubSkills(
                 skillId
@@ -50,6 +52,10 @@ fun SkillsScreen(
         },
         selectedCategory = { skill ->
             viewModel.getSkills(skill.id)
+        },
+        onSubSkillClick = { subSkill ->
+            viewModel.insertSubSkillInRoom(subSkill)
+            viewModel.getAllSubSkillsFromRoom()
         }
     )
 }

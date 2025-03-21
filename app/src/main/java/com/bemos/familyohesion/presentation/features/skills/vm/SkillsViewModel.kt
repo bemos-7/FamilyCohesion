@@ -1,22 +1,27 @@
 package com.bemos.familyohesion.presentation.features.skills.vm
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bemos.familyohesion.domain.models.Category
-import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.Skill
 import com.bemos.familyohesion.domain.models.SubSkill
+import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
+import com.bemos.familyohesion.domain.use_cases.InsertSubSkillRoomUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SkillsViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     private val getSkillsUseCase: GetSkillsUseCase,
-    private val getSubSkillsUseCase: GetSubSkillsUseCase
+    private val getSubSkillsUseCase: GetSubSkillsUseCase,
+    private val getAllSubSkillsRoomUseCase: GetAllSubSkillsRoomUseCase,
+    private val insertSubSkillRoomUseCase: InsertSubSkillRoomUseCase
 ): ViewModel() {
     private val _onCategoryComplete = MutableStateFlow<List<Category>>(listOf())
     val onCategoryComplete: StateFlow<List<Category>> get() = _onCategoryComplete
@@ -29,6 +34,9 @@ class SkillsViewModel @Inject constructor(
 
     private val _onFailure = MutableStateFlow<Exception?>(null)
     val onFailure: StateFlow<Exception?> get() = _onFailure
+
+    private val _subSkillsRoom = MutableStateFlow<List<SubSkill>>(listOf())
+    val subSkillRoom: StateFlow<List<SubSkill>> get() = _subSkillsRoom
 
     fun getCategory() {
         getCategoriesUseCase.execute(
@@ -76,4 +84,19 @@ class SkillsViewModel @Inject constructor(
             }
         )
     }
+
+    fun getAllSubSkillsFromRoom() = viewModelScope.launch {
+        getAllSubSkillsRoomUseCase.execute()
+            .collect { subSKillList ->
+                _subSkillsRoom.update {
+                    subSKillList
+                }
+            }
+    }
+
+    fun insertSubSkillInRoom(subSkill: SubSkill) = viewModelScope.launch {
+        insertSubSkillRoomUseCase.execute(subSkill)
+    }
+
+
 }

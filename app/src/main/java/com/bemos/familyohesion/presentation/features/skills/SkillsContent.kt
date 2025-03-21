@@ -52,9 +52,11 @@ fun SkillsContent(
     categories: List<Category>,
     skills: List<Skill>,
     subSkills: List<SubSkill>?,
+    localSubSkills: List<SubSkill>,
     onSkillClick: (String) -> Unit,
     onFinishSubSkill: (SubSkill) -> Unit,
-    selectedCategory: (Category) -> Unit
+    selectedCategory: (Category) -> Unit,
+    onSubSkillClick: (SubSkill) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     var isBottomSheetVisible by remember {
@@ -151,9 +153,10 @@ fun SkillsContent(
                     items(items = subSkills) {
                         SubSkillUi(
                             subSkill = it,
+                            localSubSkill = localSubSkills,
                             onEventClick = { subSkill ->
-                                if (!App.listOfSubSkills.contains(subSkill)) {
-                                    App.listOfSubSkills.add(subSkill)
+                                if (!localSubSkills.contains(subSkill)) {
+                                    onSubSkillClick(subSkill)
                                 } else {
                                     onFinishSubSkill(it)
                                 }
@@ -200,6 +203,8 @@ private fun SkillsContentPreview() {
         subSkills = listOf(),
         onSkillClick = {},
         onFinishSubSkill = {},
-        selectedCategory = {}
+        selectedCategory = {},
+        onSubSkillClick = {},
+        localSubSkills = listOf()
     )
 }
