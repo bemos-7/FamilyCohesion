@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.bemos.familyohesion.presentation.features.add_family_member.navigation.AddFamilyMemberScreen
 import com.bemos.familyohesion.presentation.features.profile.vm.ProfileViewModel
 import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
 import kotlinx.serialization.encodeToString
@@ -28,7 +29,9 @@ fun ProfileScreen(
         user = onComplete,
         familyMembers = onResult,
         onFamilyMemberAdd = {
-            navController.navigate("addFamilyMember/$it")
+            navController.navigate(AddFamilyMemberScreen(
+                familyId = it
+            ))
         },
         onDeleteUserClick = { userId ->
             viewModel.deleteUser(userId)

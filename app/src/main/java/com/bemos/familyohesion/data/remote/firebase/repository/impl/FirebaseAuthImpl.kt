@@ -36,7 +36,8 @@ class FirebaseAuthImpl(
                             mapOf(
                                 "name" to userAuth.name,
                                 "points" to 0,
-                                "relation" to userAuth.userRole
+                                "relation" to userAuth.userRole,
+                                "userId" to userId
                             )
                         )
                     )

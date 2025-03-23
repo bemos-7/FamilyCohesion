@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.presentation.di.app_component.appComponent
 import com.bemos.familyohesion.presentation.features.add_family_member.AddFamilyMemberScreen
@@ -48,6 +49,7 @@ import com.bemos.familyohesion.presentation.main_activity.vm.MainViewModel
 import com.bemos.familyohesion.presentation.main_activity.vm.factory.MainViewModelFactory
 import com.bemos.familyohesion.core.ui.theme.FamilyСohesionTheme
 import com.bemos.familyohesion.domain.models.User
+import com.bemos.familyohesion.presentation.features.add_family_member.navigation.AddFamilyMemberScreen
 import com.bemos.familyohesion.presentation.features.edit_profile.EditProfileScreen
 import com.bemos.familyohesion.presentation.features.edit_profile.vm.factory.EditProfileViewModelFactory
 import kotlinx.serialization.json.Json
@@ -186,18 +188,26 @@ class MainActivity : ComponentActivity() {
                             )
                             isBottomNavVisible = true
                         }
-                        composable(
-                            route = "addFamilyMember/{familyId}",
-                            arguments = listOf(
-                                navArgument("familyId") {
-                                    type = NavType.StringType
-                                }
-                            )
-                        ) { navBackStackEntry ->
+//                        composable(
+//                            route = "addFamilyMember/{familyId}",
+//                            arguments = listOf(
+//                                navArgument("familyId") {
+//                                    type = NavType.StringType
+//                                }
+//                            )
+//                        ) { navBackStackEntry ->
+//                            AddFamilyMemberScreen(
+//                                navController = navController,
+//                                addFamilyMemberViewModelFactory = addFamilyMemberViewModelFactory,
+//                                familyId = navBackStackEntry.arguments?.getString("faimlyId")
+//                            )
+//                        }
+                        composable<AddFamilyMemberScreen> { navBackStackEntry ->
+                            val familyMember = navBackStackEntry.toRoute<AddFamilyMemberScreen>()
                             AddFamilyMemberScreen(
                                 navController = navController,
                                 addFamilyMemberViewModelFactory = addFamilyMemberViewModelFactory,
-                                familyId = navBackStackEntry.arguments?.getString("familyId")
+                                familyId = familyMember.familyId
                             )
                             isBottomNavVisible = true
                         }
@@ -234,3 +244,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

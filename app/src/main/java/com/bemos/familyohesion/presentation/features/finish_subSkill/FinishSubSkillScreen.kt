@@ -28,6 +28,9 @@ fun FinishSubSkillScreen(
         onEndCLick = { subSkillFinish, time ->
             viewModel.updateSubSkillInRoom(subSkillFinish)
             navController.navigate("skills")
+        },
+        onBackClick = {
+            navController.navigate("skills")
         }
     )
 }

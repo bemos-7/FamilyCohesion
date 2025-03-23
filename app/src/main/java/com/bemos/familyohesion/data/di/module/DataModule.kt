@@ -257,4 +257,13 @@ class DataModule {
             daoRepository
         )
     }
+
+    @Provides
+    fun provideUpdateUserPointsUseCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): UpdateUserDetailsUseCase {
+        return UpdateUserDetailsUseCase(
+            firebaseFirestoreRepository
+        )
+    }
 }

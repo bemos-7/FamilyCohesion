@@ -193,4 +193,40 @@ class FirebaseFirestoreImpl(
             onFailure(exception)
         }
     }
+
+    override fun updateUserPoints(
+        familyId: String,
+        userId: String,
+        pointsToAdd: Int
+    ) {
+        val db = FirebaseFirestore.getInstance()
+        val familyRef = db.collection("families").document(familyId)
+
+        familyRef.get().addOnSuccessListener { document ->
+            if (document != null && document.exists()) {
+                val members = document.get("members") as? List<Map<String, Any>> ?: return@addOnSuccessListener
+
+                val updatedMembers = members.map { member ->
+                    if (member["userId"] == userId) {
+                        val currentPoints = (member["points"] as? Long ?: 0L).toInt()
+                        member.toMutableMap().apply {
+                            this["points"] = currentPoints + pointsToAdd
+                        }
+                    } else {
+                        member
+                    }
+                }
+
+                familyRef.update("members", updatedMembers)
+                    .addOnSuccessListener {
+                        println("Очки пользователя обновлены.")
+                    }
+                    .addOnFailureListener { e ->
+                        println("Ошибка: ${e.message}")
+                    }
+            }
+        }.addOnFailureListener { e ->
+            println("Ошибка загрузки документа: ${e.message}")
+        }
+    }
 }

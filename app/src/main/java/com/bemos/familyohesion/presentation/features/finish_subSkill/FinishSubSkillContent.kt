@@ -45,7 +45,8 @@ import com.google.api.Context
 fun FinishSubSkillContent(
     subSkill: SubSkill,
     familyMembers: List<FamilyMember>,
-    onEndCLick: (SubSkill, Int) -> Unit
+    onEndCLick: (SubSkill, Int) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     var expanded by remember {
@@ -74,7 +75,10 @@ fun FinishSubSkillContent(
     ) {
         Spacer(Modifier.height(22.dp))
         Row(
-            Modifier.padding(start = 16.dp),
+            Modifier.padding(start = 16.dp)
+                .clickable {
+                    onBackClick()
+                },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -283,6 +287,7 @@ private fun FinishSubSkillContentPreview() {
         ),
         onEndCLick = { string, int ->
 
-        }
+        },
+        onBackClick = {}
     )
 }
