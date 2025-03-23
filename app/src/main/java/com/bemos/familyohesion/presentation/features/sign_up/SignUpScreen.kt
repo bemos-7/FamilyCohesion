@@ -38,6 +38,9 @@ fun SignUpScreen(
             viewModel.signUp(
                 userAuth
             )
+        },
+        onSignInClick = {
+            navController.navigate("signIn")
         }
     )
 }

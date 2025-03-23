@@ -54,6 +54,7 @@ fun ProfileContent(
         modifier = Modifier
             .fillMaxSize()
             .background(White)
+            .padding(top = 50.dp)
     ) {
         Card(
             Modifier

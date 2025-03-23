@@ -87,7 +87,8 @@ fun EditProfileContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .padding(top = 50.dp),
         verticalArrangement = Arrangement.Center
     ) {
         CustomTextField(

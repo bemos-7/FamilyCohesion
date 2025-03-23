@@ -5,7 +5,9 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -107,7 +109,7 @@ fun DropDownMenuCustom(
                     stiffness = 300f,
                     dampingRatio = 0.3f
                 )
-            ) + slideInHorizontally(
+            ) + slideInVertically(
                 animationSpec = spring(
                     stiffness = 300f,
                     dampingRatio = 0.3f
@@ -118,7 +120,7 @@ fun DropDownMenuCustom(
                     stiffness = 300f,
                     dampingRatio = 0.5f
                 )
-            ) + slideOutHorizontally(
+            ) + slideOutVertically(
                 animationSpec = spring(
                     stiffness = 300f,
                     dampingRatio = 0.5f

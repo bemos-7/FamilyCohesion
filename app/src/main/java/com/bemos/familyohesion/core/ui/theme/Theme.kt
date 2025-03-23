@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -33,6 +34,19 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+private val LightFamilyScheme = lightColorScheme(
+    primary = Color(0xFFD32F2F), // Основной цвет, например, для заголовков и акцентов
+    secondary = Color(0xFF388E3C), // Вторичный цвет, например, для кнопок и интерактивных элементов
+    background = Color(0xFFFFFFFF), // Фоновый цвет
+    surface = Color(0xFFFFFFFF), // Цвет поверхностей, например, карточек
+    error = Color(0xFFD32F2F), // Цвет для ошибок
+    onPrimary = Color(0xFFFFFFFF), // Цвет текста на основном цвете
+    onSecondary = Color(0xFFFFFFFF), // Цвет текста на вторичном цвете
+    onBackground = Color(0xFF000000), // Цвет текста на фоновом цвете
+    onSurface = Color(0xFF000000), // Цвет текста на поверхностях
+    onError = Color(0xFFFFFFFF) // Цвет текста на ошибках
+)
+
 @Composable
 fun FamilyСohesionTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -51,7 +65,7 @@ fun FamilyСohesionTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = LightFamilyScheme,
         typography = Typography,
         content = content
     )

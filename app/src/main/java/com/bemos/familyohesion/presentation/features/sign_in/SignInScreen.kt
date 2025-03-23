@@ -7,11 +7,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.bemos.familyohesion.presentation.features.sign_in.vm.SignInViewModel
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 
 @Composable
 fun SignInScreen(
+    navController: NavController,
     signInViewModelFactory: SignInViewModelFactory
 ) {
     val context = LocalContext.current
@@ -24,6 +26,7 @@ fun SignInScreen(
 
     if (onSuccess) {
         Toast.makeText(context, "Success!!!", Toast.LENGTH_SHORT).show()
+        navController.navigate("profile")
     }
     if (onFailure != null) {
         Toast.makeText(context, onFailure!!.message, Toast.LENGTH_SHORT).show()
@@ -34,6 +37,9 @@ fun SignInScreen(
             viewModel.signIn(
                 userAuth
             )
+        },
+        onSignUpClick = {
+            navController.navigate("signUp")
         }
     )
 }

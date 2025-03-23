@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bemos.familyohesion.R
+import com.bemos.familyohesion.core.ui.theme.White
 import com.bemos.familyohesion.domain.models.Category
 import com.bemos.familyohesion.domain.models.Skill
 import com.bemos.familyohesion.domain.models.SubSkill
@@ -70,11 +71,12 @@ fun SkillsContent(
     }
     Box(
         modifier = Modifier.fillMaxSize()
+            .background(White)
+            .padding(top = 50.dp)
     ) {
         Column(
             Modifier
                 .fillMaxSize()
-                .background(Color.White)
         ) {
             Row(
                 Modifier
@@ -138,6 +140,7 @@ fun SkillsContent(
                 isBottomSheetVisible = false
             },
             sheetState = sheetState,
+            containerColor = Color.White
         ) {
             Text(
                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp),

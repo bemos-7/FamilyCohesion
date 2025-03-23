@@ -70,6 +70,7 @@ fun FinishSubSkillContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .padding(top = 50.dp)
     ) {
         Spacer(Modifier.height(22.dp))
         Row(

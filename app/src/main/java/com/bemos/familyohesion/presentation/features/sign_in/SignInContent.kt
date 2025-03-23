@@ -1,5 +1,6 @@
 package com.bemos.familyohesion.presentation.features.sign_in
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +25,8 @@ import com.bemos.familyohesion.shared.utils.ui.text_field.CustomTextField
 
 @Composable
 fun SignInContent(
-    onLogInClick: (UserAuth) -> Unit
+    onLogInClick: (UserAuth) -> Unit,
+    onSignUpClick: () -> Unit
 ) {
     var email by remember {
         mutableStateOf("")
@@ -74,12 +76,26 @@ fun SignInContent(
             content = "Вход"
         )
     }
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(bottom = 20.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            modifier = Modifier.clickable {
+                onSignUpClick()
+            },
+            text = "Нет аккаунта? Регистрация"
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun SignInContentPreview() {
     SignInContent(
-        onLogInClick = {}
+        onLogInClick = {},
+        onSignUpClick = {}
     )
 }
