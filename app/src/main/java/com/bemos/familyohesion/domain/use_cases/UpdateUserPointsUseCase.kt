@@ -7,12 +7,10 @@ class UpdateUserPointsUseCase(
 ) {
     fun execute(
         familyId: String,
-        userId: String,
         pointsToAdd: Int
     ) {
         firebaseFirestoreRepository.updateUserPoints(
             familyId,
-            userId,
             pointsToAdd
         )
     }

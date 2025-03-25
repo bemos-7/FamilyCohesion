@@ -26,10 +26,6 @@ fun AddFamilyMemberScreen(
     val onSuccess by viewModel.onSuccess.collectAsState()
     val onFailure by viewModel.onFailure.collectAsState()
 
-    LaunchedEffect(Unit) {
-        Toast.makeText(context, familyId!!, Toast.LENGTH_SHORT).show()
-    }
-
     if (onSuccess) {
         Toast.makeText(context, "success", Toast.LENGTH_SHORT).show()
         navController.navigate("profile")

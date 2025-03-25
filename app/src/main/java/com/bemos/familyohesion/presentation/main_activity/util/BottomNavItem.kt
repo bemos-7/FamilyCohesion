@@ -19,7 +19,7 @@ val bottomNavItems = listOf(
     BottomNavItem(
         icon = R.drawable.hotel_class,
         title = "Рейтинг",
-        route = "skills"
+        route = "rating"
     ),
     BottomNavItem(
         icon = R.drawable.profile,

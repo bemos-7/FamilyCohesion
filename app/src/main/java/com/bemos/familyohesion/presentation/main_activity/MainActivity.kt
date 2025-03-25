@@ -49,9 +49,14 @@ import com.bemos.familyohesion.presentation.main_activity.vm.MainViewModel
 import com.bemos.familyohesion.presentation.main_activity.vm.factory.MainViewModelFactory
 import com.bemos.familyohesion.core.ui.theme.FamilyСohesionTheme
 import com.bemos.familyohesion.domain.models.User
+import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.presentation.features.add_family_member.navigation.AddFamilyMemberScreen
 import com.bemos.familyohesion.presentation.features.edit_profile.EditProfileScreen
 import com.bemos.familyohesion.presentation.features.edit_profile.vm.factory.EditProfileViewModelFactory
+import com.bemos.familyohesion.presentation.features.finish_subSkill.navigation.FinishSubSkillScreen
+import com.bemos.familyohesion.presentation.features.rating.RatingScreen
+import com.bemos.familyohesion.presentation.features.rating.vm.RatingViewModel
+import com.bemos.familyohesion.presentation.features.rating.vm.factory.RatingViewModelFactory
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -76,6 +81,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var editProfileViewModelFactory: EditProfileViewModelFactory
+
+    @Inject
+    lateinit var ratingViewModelFactory: RatingViewModelFactory
 
     @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
@@ -236,6 +244,15 @@ class MainActivity : ComponentActivity() {
                                 finishSubSkillViewModelFactory = finishSubSkillViewModelFactory
                             )
                             isBottomNavVisible = true
+                        }
+
+                        composable(
+                            route = "rating"
+                        ) {
+                            RatingScreen(
+                                navController,
+                                ratingViewModelFactory = ratingViewModelFactory
+                            )
                         }
                     }
                 }

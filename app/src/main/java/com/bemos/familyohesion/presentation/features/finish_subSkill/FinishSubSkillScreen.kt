@@ -21,13 +21,20 @@ fun FinishSubSkillScreen(
     )
 
     val familyMembers by viewModel.onResult.collectAsState()
+    val familyId by viewModel.callback.collectAsState()
 
     FinishSubSkillContent(
         subSkill = subSkill!!,
         familyMembers = familyMembers,
         onEndCLick = { subSkillFinish, time ->
-            viewModel.updateSubSkillInRoom(subSkillFinish)
-            navController.navigate("skills")
+            if (familyId != null) {
+                viewModel.updateUserPoints(
+                    familyId = familyId!!,
+                    pointsToAdd = subSkill.points,
+                )
+                viewModel.updateSubSkillInRoom(subSkillFinish)
+                navController.navigate("skills")
+            }
         },
         onBackClick = {
             navController.navigate("skills")

@@ -19,10 +19,12 @@ class SignUpViewModel @Inject constructor(
     val onFailure: StateFlow<Exception?> get() = _onFailure
 
     fun signUp(
-        userAuth: UserAuth
+        userAuth: UserAuth,
+        familyName: String
     ) {
         signUpUseCase.execute(
             userAuth,
+            familyName = familyName,
             onSuccess = {
                 _onSuccess.update {
                     true

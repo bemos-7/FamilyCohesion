@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.domain.models.User
+import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
 import com.bemos.familyohesion.domain.use_cases.UpdateSubSkillRoomUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateUserPointsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -17,7 +19,9 @@ import javax.inject.Inject
 class FinishSubSkillViewModel @Inject constructor(
     private val getUserDataUseCase: GetUserDataUseCase,
     private val getFamilyMembersUseCase: GetFamilyMembersUseCase,
-    private val updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase
+    private val updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase,
+    private val updateUserPointsUseCase: UpdateUserPointsUseCase,
+    private val getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase
 ) : ViewModel() {
 
     private val _onComplete = MutableStateFlow(
@@ -33,8 +37,12 @@ class FinishSubSkillViewModel @Inject constructor(
     private val _onFailure = MutableStateFlow<Exception?>(null)
     val onFailure: StateFlow<Exception?> get() = _onFailure
 
+    private val _callback = MutableStateFlow<String?>(null)
+    val callback: StateFlow<String?> get() = _callback
+
     init {
         getUserData()
+        getFamilyId()
     }
 
     private fun getUserData() {
@@ -84,5 +92,23 @@ class FinishSubSkillViewModel @Inject constructor(
 
     fun updateSubSkillInRoom(subSkill: SubSkill) = viewModelScope.launch {
         updateSubSkillRoomUseCase.execute(subSkill)
+    }
+
+    fun updateUserPoints(
+        familyId: String,
+        pointsToAdd: Int
+    ) {
+        updateUserPointsUseCase.execute(
+            familyId = familyId,
+            pointsToAdd = pointsToAdd
+        )
+    }
+
+    private fun getFamilyId() {
+        getFamilyIdForCurrentUserUseCase.execute { id ->
+            _callback.update {
+                id
+            }
+        }
     }
 }

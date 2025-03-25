@@ -50,6 +50,7 @@ import com.bemos.familyohesion.presentation.features.skills.utils.ui.SubSkillUi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SkillsContent(
+    points: Int,
     categories: List<Category>,
     skills: List<Skill>,
     subSkills: List<SubSkill>?,
@@ -88,14 +89,13 @@ fun SkillsContent(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.points),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-                    Spacer(modifier = Modifier.width(1.dp))
                     Text(
-                        text = "200",
+                        text = "XP",
+                        fontSize = 20.sp
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = points.toString(),
                         fontSize = 20.sp
                     )
                 }
@@ -208,6 +208,7 @@ private fun SkillsContentPreview() {
         onFinishSubSkill = {},
         selectedCategory = {},
         onSubSkillClick = {},
-        localSubSkills = listOf()
+        localSubSkills = listOf(),
+        points = 0
     )
 }

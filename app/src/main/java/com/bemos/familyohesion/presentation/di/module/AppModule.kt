@@ -4,7 +4,10 @@ import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCurrentUserIdUseCase
+import com.bemos.familyohesion.domain.use_cases.GetCurrentUserPointsUseCase
+import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
+import com.bemos.familyohesion.domain.use_cases.GetFamilyRatingsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
@@ -15,10 +18,12 @@ import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
 import com.bemos.familyohesion.domain.use_cases.UpdateSubSkillRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.UpdateUserDetailsUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateUserPointsUseCase
 import com.bemos.familyohesion.presentation.features.add_family_member.vm.factory.AddFamilyMemberViewModelFactory
 import com.bemos.familyohesion.presentation.features.edit_profile.vm.factory.EditProfileViewModelFactory
 import com.bemos.familyohesion.presentation.features.finish_subSkill.vm.factory.FinishSubSkillViewModelFactory
 import com.bemos.familyohesion.presentation.features.profile.vm.factory.ProfileViewModelFactory
+import com.bemos.familyohesion.presentation.features.rating.vm.factory.RatingViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_up.vm.factory.SignUpViewModelFactory
 import com.bemos.familyohesion.presentation.features.skills.vm.factory.SkillsViewModelFactory
@@ -75,14 +80,18 @@ class AppModule {
         getSkillsUseCase: GetSkillsUseCase,
         getSubSkillsUseCase: GetSubSkillsUseCase,
         getAllSubSkillsRoomUseCase: GetAllSubSkillsRoomUseCase,
-        insertSubSkillRoomUseCase: InsertSubSkillRoomUseCase
+        insertSubSkillRoomUseCase: InsertSubSkillRoomUseCase,
+        getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase,
+        getCurrentUserPointsUseCase: GetCurrentUserPointsUseCase
     ): SkillsViewModelFactory {
         return SkillsViewModelFactory(
             getCategoriesUseCase = getCategoriesUseCase,
             getSkillsUseCase = getSkillsUseCase,
             getSubSkillsUseCase = getSubSkillsUseCase,
             getAllSubSkillsRoomUseCase = getAllSubSkillsRoomUseCase,
-            insertSubSkillRoomUseCase = insertSubSkillRoomUseCase
+            insertSubSkillRoomUseCase = insertSubSkillRoomUseCase,
+            getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase,
+            getCurrentUserPointsUseCase = getCurrentUserPointsUseCase
         )
     }
 
@@ -90,12 +99,16 @@ class AppModule {
     fun provideFinishSubSkillViewModelFactory(
         getUserDataUseCase: GetUserDataUseCase,
         getFamilyMembersUseCase: GetFamilyMembersUseCase,
-        updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase
+        updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase,
+        getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase,
+        updateUserPointsUseCase: UpdateUserPointsUseCase
     ): FinishSubSkillViewModelFactory {
         return FinishSubSkillViewModelFactory(
             getUserDataUseCase = getUserDataUseCase,
             getFamilyMembersUseCase = getFamilyMembersUseCase,
-            updateSubSkillRoomUseCase = updateSubSkillRoomUseCase
+            updateSubSkillRoomUseCase = updateSubSkillRoomUseCase,
+            getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase,
+            updateUserPointsUseCase = updateUserPointsUseCase
         )
     }
 
@@ -116,6 +129,17 @@ class AppModule {
         return EditProfileViewModelFactory(
             updateUserDetailsUseCase = updateUserDetailsUseCase,
             sendPasswordResetEmailUseCase = sendPasswordResetEmailUseCase
+        )
+    }
+
+    @Provides
+    fun provideRatingViewModelFactory(
+        getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase,
+        getFamilyRatingsUseCase: GetFamilyRatingsUseCase
+    ): RatingViewModelFactory {
+        return RatingViewModelFactory(
+            getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase,
+            getFamilyRatingsUseCase = getFamilyRatingsUseCase
         )
     }
 

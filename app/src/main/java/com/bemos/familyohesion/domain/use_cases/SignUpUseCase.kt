@@ -8,11 +8,13 @@ class SignUpUseCase(
 ) {
     fun execute(
         userAuth: UserAuth,
+        familyName: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         repository.signUp(
             userAuth = userAuth,
+            familyName = familyName,
             onSuccess = onSuccess,
             onFailure = onFailure
         )

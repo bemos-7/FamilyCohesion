@@ -26,6 +26,7 @@ fun SkillsScreen(
     val skills by viewModel.onSkillsComplete.collectAsState()
     val subSkills by viewModel.onSubSkillsComplete.collectAsState()
     val subSkillsFromRoom by viewModel.subSkillRoom.collectAsState()
+    val points by viewModel.pointsCallback.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getCategory()
@@ -37,6 +38,7 @@ fun SkillsScreen(
     Log.d("AppCheck", App.endingSubSkills.toString())
 
     SkillsContent(
+        points = points ?: 0,
         categories = categories,
         skills = skills,
         subSkills = subSkills,

@@ -16,7 +16,10 @@ import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCurrentUserIdUseCase
+import com.bemos.familyohesion.domain.use_cases.GetCurrentUserPointsUseCase
+import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
+import com.bemos.familyohesion.domain.use_cases.GetFamilyRatingsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
@@ -27,6 +30,7 @@ import com.bemos.familyohesion.domain.use_cases.SignUpAndJoinFamilyUseCase
 import com.bemos.familyohesion.domain.use_cases.SignUpUseCase
 import com.bemos.familyohesion.domain.use_cases.UpdateSubSkillRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.UpdateUserDetailsUseCase
+import com.bemos.familyohesion.domain.use_cases.UpdateUserPointsUseCase
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -261,8 +265,35 @@ class DataModule {
     @Provides
     fun provideUpdateUserPointsUseCase(
         firebaseFirestoreRepository: FirebaseFirestoreRepository
-    ): UpdateUserDetailsUseCase {
-        return UpdateUserDetailsUseCase(
+    ): UpdateUserPointsUseCase {
+        return UpdateUserPointsUseCase(
+            firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun provideGetFamilyIdCurrentUser(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): GetFamilyIdForCurrentUserUseCase {
+        return GetFamilyIdForCurrentUserUseCase(
+            firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun provideGetCurrentUserPointsUseCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): GetCurrentUserPointsUseCase {
+        return GetCurrentUserPointsUseCase(
+            firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun provideGetFamilyRatingsUseCase(
+        firebaseFirestoreRepository: FirebaseFirestoreRepository
+    ): GetFamilyRatingsUseCase {
+        return GetFamilyRatingsUseCase(
             firebaseFirestoreRepository
         )
     }

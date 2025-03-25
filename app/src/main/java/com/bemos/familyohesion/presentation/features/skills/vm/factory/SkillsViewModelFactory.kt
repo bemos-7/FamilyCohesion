@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
+import com.bemos.familyohesion.domain.use_cases.GetCurrentUserPointsUseCase
+import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.InsertSubSkillRoomUseCase
@@ -16,7 +18,9 @@ class SkillsViewModelFactory(
     private val getSkillsUseCase: GetSkillsUseCase,
     private val getSubSkillsUseCase: GetSubSkillsUseCase,
     private val getAllSubSkillsRoomUseCase: GetAllSubSkillsRoomUseCase,
-    private val insertSubSkillRoomUseCase: InsertSubSkillRoomUseCase
+    private val insertSubSkillRoomUseCase: InsertSubSkillRoomUseCase,
+    private val getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase,
+    private val getCurrentUserPointsUseCase: GetCurrentUserPointsUseCase
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return SkillsViewModel(
@@ -24,7 +28,9 @@ class SkillsViewModelFactory(
             getSkillsUseCase = getSkillsUseCase,
             getSubSkillsUseCase =  getSubSkillsUseCase,
             getAllSubSkillsRoomUseCase = getAllSubSkillsRoomUseCase,
-            insertSubSkillRoomUseCase = insertSubSkillRoomUseCase
+            insertSubSkillRoomUseCase = insertSubSkillRoomUseCase,
+            getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase,
+            getCurrentUserPointsUseCase = getCurrentUserPointsUseCase
         ) as T
     }
 }

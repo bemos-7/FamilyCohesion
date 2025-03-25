@@ -26,7 +26,7 @@ import com.bemos.familyohesion.shared.utils.ui.text_field.CustomTextField
 @Composable
 fun SignUpContent(
     modifier: Modifier = Modifier,
-    onRegisterClick: (UserAuth) -> Unit,
+    onRegisterClick: (UserAuth, String) -> Unit,
     onSignInClick: () -> Unit
 ) {
     var name by remember {
@@ -39,6 +39,9 @@ fun SignUpContent(
         mutableStateOf("")
     }
     var userRole by remember {
+        mutableStateOf("")
+    }
+    var familyName by remember {
         mutableStateOf("")
     }
     Column(
@@ -81,6 +84,12 @@ fun SignUpContent(
             onValueChange = { userRole = it },
             label = "Роль (Отец, Мать, Сын, Дочь)"
         )
+        Spacer(modifier = Modifier.height(14.dp))
+        CustomTextField(
+            text = familyName,
+            onValueChange = { familyName = it },
+            label = "Название семьи (Воронцовы, Гусейновы)"
+        )
         Spacer(modifier = Modifier.height(52.dp))
         CustomButton(
             onClick = {
@@ -90,7 +99,7 @@ fun SignUpContent(
                     password = password,
                     userRole = userRole
                 )
-                onRegisterClick(user)
+                onRegisterClick(user, familyName)
             },
             content = "Регистрация"
         )
@@ -113,7 +122,9 @@ fun SignUpContent(
 @Composable
 private fun SignUpContentPreview() {
     SignUpContent(
-        onRegisterClick = {},
+        onRegisterClick = { user, f ->
+
+        },
         onSignInClick = {}
     )
 }

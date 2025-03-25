@@ -34,9 +34,10 @@ fun SignUpScreen(
     }
 
     SignUpContent(
-        onRegisterClick = { userAuth ->
+        onRegisterClick = { userAuth, familyName ->
             viewModel.signUp(
-                userAuth
+                userAuth,
+                familyName = familyName
             )
         },
         onSignInClick = {
