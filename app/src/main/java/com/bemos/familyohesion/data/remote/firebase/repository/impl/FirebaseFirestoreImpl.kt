@@ -2,13 +2,16 @@ package com.bemos.familyohesion.data.remote.firebase.repository.impl
 
 import android.util.Log
 import com.bemos.familyohesion.domain.models.Category
+import com.bemos.familyohesion.domain.models.Family
 import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.Skill
 import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.domain.models.User
 import com.bemos.familyohesion.domain.models.UserAuth
 import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
+import com.bemos.familyohesion.presentation.features.rating.utils.model.FamilyRating
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 
@@ -196,37 +199,146 @@ class FirebaseFirestoreImpl(
 
     override fun updateUserPoints(
         familyId: String,
-        userId: String,
         pointsToAdd: Int
     ) {
         val db = FirebaseFirestore.getInstance()
         val familyRef = db.collection("families").document(familyId)
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        familyRef.get().addOnSuccessListener { document ->
+            val db = FirebaseFirestore.getInstance()
+            val familyRef = db.collection("families").document(familyId)
+            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener
+
+            familyRef.get().addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val members = document.get("members") as? List<Map<String, Any>> ?: return@addOnSuccessListener
+
+                    val updatedMembers = members.map { member ->
+                        val mutableMember = member.toMutableMap()
+
+                        if (member["userId"] == currentUserId) {
+                            val currentPoints = (member["points"] as? Long ?: 0L).toInt()
+                            mutableMember["points"] = currentPoints + pointsToAdd
+                        }
+
+                        mutableMember
+                    }
+
+                    // Обновление членов семьи и инкрементирование familyPoints
+                    familyRef.update(
+                        mapOf(
+                            "members" to updatedMembers,
+                            "familyPoints" to FieldValue.increment(pointsToAdd.toLong()) // Инкрементируем семейные очки
+                        )
+                    )
+                        .addOnSuccessListener {
+                            println("Очки пользователя и семейные очки обновлены.")
+                        }
+                        .addOnFailureListener { e ->
+                            println("Ошибка: ${e.message}")
+                        }
+                }
+            }.addOnFailureListener { e ->
+                println("Ошибка загрузки документа: ${e.message}")
+            }
+        }
+    }
+
+    override fun getFamilyIdForCurrentUser(callback: (String?) -> Unit) {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+            ?: run {
+                callback(null)
+                return
+            }
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(currentUserId)
+            .get()
+            .addOnSuccessListener { document ->
+                val familyId = document.getString("familyId")
+                callback(familyId)
+            }
+            .addOnFailureListener { e ->
+                println("Ошибка при получении familyId: ${e.message}")
+                callback(null)
+            }
+    }
+
+    override fun getCurrentUserPoints(familyId: String, callback: (Int?) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val familyRef = db.collection("families").document(familyId)
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+            ?: run {
+                callback(null)
+                return
+            }
 
         familyRef.get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
-                val members = document.get("members") as? List<Map<String, Any>> ?: return@addOnSuccessListener
+                val members = document.get("members") as? List<Map<String, Any>> ?: run {
+                    callback(null)
+                    return@addOnSuccessListener
+                }
 
-                val updatedMembers = members.map { member ->
-                    if (member["userId"] == userId) {
-                        val currentPoints = (member["points"] as? Long ?: 0L).toInt()
-                        member.toMutableMap().apply {
-                            this["points"] = currentPoints + pointsToAdd
-                        }
+                val user = members.find { it["userId"] == currentUserId }
+                val points = (user?.get("points") as? Long)?.toInt() ?: 0
+                callback(points)
+            } else {
+                callback(null)
+            }
+        }.addOnFailureListener { e ->
+            callback(null)
+        }
+    }
+
+    override fun getFamilyRatings(callback: (List<FamilyRating>) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val familyRatings = mutableListOf<FamilyRating>()
+
+        db.collection("families").get()
+            .addOnSuccessListener { familiesSnapshot ->
+                var familiesProcessed = 0
+
+                for (familyDoc in familiesSnapshot.documents) {
+                    val family = familyDoc.toObject(Family::class.java)
+                    val familyId = familyDoc.id
+
+                    if (family != null) {
+                        db.collection("users")
+                            .whereEqualTo("familyId", familyId)
+                            .get()
+                            .addOnSuccessListener { membersSnapshot ->
+                                familyRatings.add(FamilyRating(family))
+
+                                // Проверка завершения всех запросов
+                                familiesProcessed++
+                                if (familiesProcessed == familiesSnapshot.size()) {
+                                    callback(familyRatings)
+                                }
+                            }
+                            .addOnFailureListener {
+                                familiesProcessed++
+                                if (familiesProcessed == familiesSnapshot.size()) {
+                                    callback(familyRatings)
+                                }
+                            }
                     } else {
-                        member
+                        familiesProcessed++
+                        if (familiesProcessed == familiesSnapshot.size()) {
+                            callback(familyRatings)
+                        }
                     }
                 }
 
-                familyRef.update("members", updatedMembers)
-                    .addOnSuccessListener {
-                        println("Очки пользователя обновлены.")
-                    }
-                    .addOnFailureListener { e ->
-                        println("Ошибка: ${e.message}")
-                    }
+                // Если семей нет, сразу возвращаем пустой список
+                if (familiesSnapshot.isEmpty) {
+                    callback(familyRatings)
+                }
             }
-        }.addOnFailureListener { e ->
-            println("Ошибка загрузки документа: ${e.message}")
-        }
+            .addOnFailureListener {
+                callback(emptyList())
+            }
     }
 }

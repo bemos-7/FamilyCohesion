@@ -22,7 +22,7 @@ class FirebaseAuthImpl(
         return currentUser?.uid
     }
 
-    override fun signUp(userAuth: UserAuth, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    override fun signUp(userAuth: UserAuth, familyName: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         firebaseAuth.createUserWithEmailAndPassword(userAuth.email, userAuth.password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -31,6 +31,7 @@ class FirebaseAuthImpl(
 
                     val newFamily = Family(
                         familyId = familyId,
+                        name = familyName,
                         adminId = userId,
                         members = listOf(
                             mapOf(
