@@ -1,5 +1,6 @@
 package com.bemos.familyohesion.presentation.di.module
 
+import com.bemos.familyohesion.domain.use_cases.CreateTaskUseCase
 import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
@@ -8,6 +9,7 @@ import com.bemos.familyohesion.domain.use_cases.GetCurrentUserPointsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyRatingsUseCase
+import com.bemos.familyohesion.domain.use_cases.GetPendingTasksUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
@@ -27,6 +29,7 @@ import com.bemos.familyohesion.presentation.features.rating.vm.factory.RatingVie
 import com.bemos.familyohesion.presentation.features.sign_in.vm.factory.SignInViewModelFactory
 import com.bemos.familyohesion.presentation.features.sign_up.vm.factory.SignUpViewModelFactory
 import com.bemos.familyohesion.presentation.features.skills.vm.factory.SkillsViewModelFactory
+import com.bemos.familyohesion.presentation.features.tasks.vm.factory.TasksViewModelFactory
 import com.bemos.familyohesion.presentation.main_activity.vm.factory.MainViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -101,14 +104,16 @@ class AppModule {
         getFamilyMembersUseCase: GetFamilyMembersUseCase,
         updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase,
         getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase,
-        updateUserPointsUseCase: UpdateUserPointsUseCase
+        updateUserPointsUseCase: UpdateUserPointsUseCase,
+        createTaskUseCase: CreateTaskUseCase
     ): FinishSubSkillViewModelFactory {
         return FinishSubSkillViewModelFactory(
             getUserDataUseCase = getUserDataUseCase,
             getFamilyMembersUseCase = getFamilyMembersUseCase,
             updateSubSkillRoomUseCase = updateSubSkillRoomUseCase,
             getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase,
-            updateUserPointsUseCase = updateUserPointsUseCase
+            updateUserPointsUseCase = updateUserPointsUseCase,
+            createTaskUseCase = createTaskUseCase
         )
     }
 
@@ -140,6 +145,15 @@ class AppModule {
         return RatingViewModelFactory(
             getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase,
             getFamilyRatingsUseCase = getFamilyRatingsUseCase
+        )
+    }
+
+    @Provides
+    fun provideTasksViewModelFactory(
+        getPendingTasksUseCase: GetPendingTasksUseCase
+    ): TasksViewModelFactory {
+        return TasksViewModelFactory(
+            getPendingTasksUseCase = getPendingTasksUseCase
         )
     }
 

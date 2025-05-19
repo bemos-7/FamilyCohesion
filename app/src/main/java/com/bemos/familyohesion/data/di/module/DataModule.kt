@@ -9,9 +9,12 @@ import com.bemos.familyohesion.data.local.dao.impl.DaoRepositoryImpl
 import com.bemos.familyohesion.data.local.db.Database
 import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseAuthImpl
 import com.bemos.familyohesion.data.remote.firebase.repository.impl.FirebaseFirestoreImpl
+import com.bemos.familyohesion.data.remote.firebase.repository.impl.TaskImpl
 import com.bemos.familyohesion.domain.repositories.DaoRepository
 import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
 import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
+import com.bemos.familyohesion.domain.repositories.TaskRepository
+import com.bemos.familyohesion.domain.use_cases.CreateTaskUseCase
 import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
@@ -20,6 +23,7 @@ import com.bemos.familyohesion.domain.use_cases.GetCurrentUserPointsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyRatingsUseCase
+import com.bemos.familyohesion.domain.use_cases.GetPendingTasksUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetSubSkillsUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
@@ -36,6 +40,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import dagger.Module
 import dagger.Provides
 
@@ -59,6 +65,13 @@ class DataModule {
         firebase: Firebase
     ): FirebaseFirestore {
         return firebase.firestore
+    }
+
+    @Provides
+    fun provideFirebaseStorage(
+        firebase: Firebase
+    ): FirebaseStorage {
+        return firebase.storage
     }
 
     @Provides
@@ -102,6 +115,19 @@ class DataModule {
             categoryDao = categoryDao,
             skillDao = skillDao,
             subSkillDao = subSkillDao
+        )
+    }
+
+    @Provides
+    fun provideTaskRepository(
+       storage: FirebaseStorage,
+       firestore: FirebaseFirestore,
+       firebaseAuth: FirebaseAuth
+    ): TaskRepository {
+        return TaskImpl(
+            firestore = firestore,
+            firebaseStorage = storage,
+            firebaseAuth = firebaseAuth
         )
     }
 
@@ -295,6 +321,24 @@ class DataModule {
     ): GetFamilyRatingsUseCase {
         return GetFamilyRatingsUseCase(
             firebaseFirestoreRepository
+        )
+    }
+
+    @Provides
+    fun provideCreateTaskUse(
+        taskRepository: TaskRepository
+    ): CreateTaskUseCase {
+        return CreateTaskUseCase(
+            taskRepository
+        )
+    }
+
+    @Provides
+    fun provideGetPendingTasksUseCase(
+        taskRepository: TaskRepository
+    ): GetPendingTasksUseCase {
+        return GetPendingTasksUseCase(
+            taskRepository = taskRepository
         )
     }
 }

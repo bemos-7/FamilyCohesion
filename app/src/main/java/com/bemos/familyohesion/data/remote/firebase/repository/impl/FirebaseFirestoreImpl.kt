@@ -203,7 +203,6 @@ class FirebaseFirestoreImpl(
     ) {
         val db = FirebaseFirestore.getInstance()
         val familyRef = db.collection("families").document(familyId)
-        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         familyRef.get().addOnSuccessListener { document ->
             val db = FirebaseFirestore.getInstance()

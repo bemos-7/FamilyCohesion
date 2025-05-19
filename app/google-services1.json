@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "872504609635",
+    "project_id": "familycohesion-62e73",
+    "storage_bucket": "familycohesion-62e73.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872504609635:android:9f16fc445f891252bb6156",
+        "android_client_info": {
+          "package_name": "com.bemos.familyohesion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNO9H4XZooylmu_j2exqQ_TR6P5ZV7Cgw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

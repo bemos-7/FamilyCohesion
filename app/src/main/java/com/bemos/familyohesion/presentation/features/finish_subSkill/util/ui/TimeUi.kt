@@ -78,7 +78,7 @@ fun TimeUiState(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "${time} мин",
+                text = "+${time} мин",
                 color = contentColor,
                 fontSize = 14.sp,
             )

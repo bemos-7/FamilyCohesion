@@ -57,6 +57,8 @@ import com.bemos.familyohesion.presentation.features.finish_subSkill.navigation.
 import com.bemos.familyohesion.presentation.features.rating.RatingScreen
 import com.bemos.familyohesion.presentation.features.rating.vm.RatingViewModel
 import com.bemos.familyohesion.presentation.features.rating.vm.factory.RatingViewModelFactory
+import com.bemos.familyohesion.presentation.features.tasks.TasksScreen
+import com.bemos.familyohesion.presentation.features.tasks.vm.factory.TasksViewModelFactory
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -86,7 +88,11 @@ class MainActivity : ComponentActivity() {
     lateinit var ratingViewModelFactory: RatingViewModelFactory
 
     @Inject
+    lateinit var tasksViewModelFactory: TasksViewModelFactory
+
+    @Inject
     lateinit var mainViewModelFactory: MainViewModelFactory
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         appComponent.inject(this)
@@ -252,6 +258,14 @@ class MainActivity : ComponentActivity() {
                             RatingScreen(
                                 navController,
                                 ratingViewModelFactory = ratingViewModelFactory
+                            )
+                        }
+
+                        composable(
+                            route = "tasks"
+                        ) {
+                            TasksScreen(
+                                tasksViewModelFactory = tasksViewModelFactory
                             )
                         }
                     }

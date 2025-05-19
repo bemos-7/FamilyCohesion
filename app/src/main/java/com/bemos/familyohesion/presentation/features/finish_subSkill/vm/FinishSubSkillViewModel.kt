@@ -1,10 +1,12 @@
 package com.bemos.familyohesion.presentation.features.finish_subSkill.vm
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bemos.familyohesion.domain.models.FamilyMember
 import com.bemos.familyohesion.domain.models.SubSkill
 import com.bemos.familyohesion.domain.models.User
+import com.bemos.familyohesion.domain.use_cases.CreateTaskUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
@@ -21,7 +23,8 @@ class FinishSubSkillViewModel @Inject constructor(
     private val getFamilyMembersUseCase: GetFamilyMembersUseCase,
     private val updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase,
     private val updateUserPointsUseCase: UpdateUserPointsUseCase,
-    private val getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase
+    private val getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase,
+    private val createTaskUseCase: CreateTaskUseCase
 ) : ViewModel() {
 
     private val _onComplete = MutableStateFlow(
@@ -101,6 +104,20 @@ class FinishSubSkillViewModel @Inject constructor(
         updateUserPointsUseCase.execute(
             familyId = familyId,
             pointsToAdd = pointsToAdd
+        )
+    }
+
+    fun createTask(
+        imageUri: Uri,
+        pointsToAdd: Int,
+        name: String
+    ) = viewModelScope.launch {
+        createTaskUseCase.execute(
+            imageUri = imageUri,
+            familyId = _onComplete.value.familyId,
+            userId = _onComplete.value.userId,
+            pointsToAdd = pointsToAdd,
+            name = name
         )
     }
 

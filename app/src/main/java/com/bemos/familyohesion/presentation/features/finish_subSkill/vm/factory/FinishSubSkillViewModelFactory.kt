@@ -2,6 +2,7 @@ package com.bemos.familyohesion.presentation.features.finish_subSkill.vm.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bemos.familyohesion.domain.use_cases.CreateTaskUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyIdForCurrentUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetFamilyMembersUseCase
 import com.bemos.familyohesion.domain.use_cases.GetUserDataUseCase
@@ -14,7 +15,8 @@ class FinishSubSkillViewModelFactory(
     private val getFamilyMembersUseCase: GetFamilyMembersUseCase,
     private val updateSubSkillRoomUseCase: UpdateSubSkillRoomUseCase,
     private val updateUserPointsUseCase: UpdateUserPointsUseCase,
-    private val getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase
+    private val getFamilyIdForCurrentUserUseCase: GetFamilyIdForCurrentUserUseCase,
+    private val createTaskUseCase: CreateTaskUseCase
 
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -23,7 +25,8 @@ class FinishSubSkillViewModelFactory(
             getFamilyMembersUseCase = getFamilyMembersUseCase,
             updateSubSkillRoomUseCase = updateSubSkillRoomUseCase,
             updateUserPointsUseCase = updateUserPointsUseCase,
-            getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase
+            getFamilyIdForCurrentUserUseCase = getFamilyIdForCurrentUserUseCase,
+            createTaskUseCase = createTaskUseCase
         ) as T
     }
 }
