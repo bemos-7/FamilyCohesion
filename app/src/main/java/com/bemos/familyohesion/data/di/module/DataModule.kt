@@ -15,6 +15,7 @@ import com.bemos.familyohesion.domain.repositories.FirebaseAuthRepository
 import com.bemos.familyohesion.domain.repositories.FirebaseFirestoreRepository
 import com.bemos.familyohesion.domain.repositories.TaskRepository
 import com.bemos.familyohesion.domain.use_cases.CreateTaskUseCase
+import com.bemos.familyohesion.domain.use_cases.DeleteTaskUseCase
 import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
@@ -338,6 +339,15 @@ class DataModule {
         taskRepository: TaskRepository
     ): GetPendingTasksUseCase {
         return GetPendingTasksUseCase(
+            taskRepository = taskRepository
+        )
+    }
+
+    @Provides
+    fun provideDeleteTaskUseCase(
+        taskRepository: TaskRepository
+    ): DeleteTaskUseCase {
+        return DeleteTaskUseCase(
             taskRepository = taskRepository
         )
     }

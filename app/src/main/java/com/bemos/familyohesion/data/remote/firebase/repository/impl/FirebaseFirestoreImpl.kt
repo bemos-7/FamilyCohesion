@@ -199,6 +199,7 @@ class FirebaseFirestoreImpl(
 
     override fun updateUserPoints(
         familyId: String,
+        userId: String,
         pointsToAdd: Int
     ) {
         val db = FirebaseFirestore.getInstance()
@@ -207,7 +208,7 @@ class FirebaseFirestoreImpl(
         familyRef.get().addOnSuccessListener { document ->
             val db = FirebaseFirestore.getInstance()
             val familyRef = db.collection("families").document(familyId)
-            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener
+            val currentUserId = if (userId.isEmpty()) FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener else userId
 
             familyRef.get().addOnSuccessListener { document ->
                 if (document != null && document.exists()) {

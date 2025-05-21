@@ -7,4 +7,5 @@ interface TaskRepository {
     suspend fun uploadImageAndGetUrl(imageUri: Uri) : String
     suspend fun createTask(imageUri: Uri, familyId: String, userId: String, pointsToAdd: Int, name: String)
     suspend fun getPendingTasks(): List<Task>
+    suspend fun deleteTask(task: Task)
 }

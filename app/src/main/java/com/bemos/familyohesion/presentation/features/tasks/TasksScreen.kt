@@ -11,7 +11,6 @@ import com.bemos.familyohesion.presentation.features.tasks.vm.factory.TasksViewM
 fun TasksScreen(
     tasksViewModelFactory: TasksViewModelFactory
 ) {
-
     val viewModel = viewModel<TasksViewModel>(
         factory = tasksViewModelFactory
     )
@@ -21,6 +20,21 @@ fun TasksScreen(
     Log.d("tasks", pendTasks.toString())
 
     TasksContent(
-        tasks = pendTasks
+        tasks = pendTasks,
+        onFinishTask = { task ->
+            viewModel.updateUserPoints(
+                task
+            )
+            viewModel.getPendingTasks()
+        },
+        onDismissTask = { task ->
+            viewModel.deleteTaskUseCase(
+                task = task
+            )
+            viewModel.getPendingTasks()
+        },
+        isRefresh = {
+            viewModel.getPendingTasks()
+        }
     )
 }

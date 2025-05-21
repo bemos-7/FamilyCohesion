@@ -26,14 +26,14 @@ fun FinishSubSkillScreen(
     FinishSubSkillContent(
         subSkill = subSkill!!,
         familyMembers = familyMembers,
-        onEndCLick = { imageUri, time ->
+        onEndCLick = { imageUri, time, subSkillFinish ->
             if (familyId != null) {
 //                viewModel.updateUserPoints(
 //                    familyId = familyId!!,
 //                    pointsToAdd = subSkill.points,
 //                )
                 viewModel.createTask(imageUri = imageUri, pointsToAdd = subSkill.points, name = subSkill.name)
-//                viewModel.updateSubSkillInRoom(subSkillFinish)
+                viewModel.updateSubSkillInRoom(subSkillFinish)
                 navController.navigate("skills")
             }
         },

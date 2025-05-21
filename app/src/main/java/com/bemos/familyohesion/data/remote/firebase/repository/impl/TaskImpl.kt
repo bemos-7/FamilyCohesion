@@ -71,4 +71,18 @@ class TaskImpl(
             emptyList()
         }
     }
+
+    override suspend fun deleteTask(
+        task: Task
+    ) {
+        try {
+            firestore.collection("tasks").document(task.id).delete().await()
+            val imageName = "${task.userId}.jpg"
+            val imageRef = firebaseStorage.reference.child("images/$imageName")
+            imageRef.delete().await()
+            Log.d("DeleteTast", "Task deleted successfully!")
+        } catch(e: Exception) {
+            Log.d("DeleteTast", e.message.toString())
+        }
+    }
 }

@@ -16,7 +16,7 @@ interface FirebaseFirestoreRepository {
     fun getSubSkills(skillId: String, onComplete: (List<SubSkill>) -> Unit, onFailure: (Exception) -> Unit)
     fun deleteUser(userId: String, onComplete: () -> Unit, onFailure: (Exception) -> Unit)
     fun updateUserDetails(userId: String, newEmail: String, newName: String,onComplete: () -> Unit, onFailure: (Exception) -> Unit)
-    fun updateUserPoints(familyId: String, pointsToAdd: Int)
+    fun updateUserPoints(familyId: String, userId: String = "", pointsToAdd: Int)
     fun getFamilyIdForCurrentUser(callback: (String?) -> Unit)
     fun getCurrentUserPoints(familyId: String, callback: (Int?) -> Unit)
     fun getFamilyRatings(callback: (List<FamilyRating>) -> Unit)

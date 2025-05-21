@@ -1,6 +1,7 @@
 package com.bemos.familyohesion.presentation.features.tasks.utils.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,12 +27,16 @@ import com.bemos.familyohesion.domain.models.Task
 
 @Composable
 fun TaskCardItem(
-    task: Task
+    task: Task,
+    onCardClick: (Task) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp),
+            .height(120.dp)
+            .clickable {
+                onCardClick(task)
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
@@ -85,6 +90,7 @@ private fun TaskCardItemPreview() {
         pointsToAdd = 21,
         name = "Приготовление супа",
         isApproved = false
-        )
+        ),
+        onCardClick = {}
     )
 }

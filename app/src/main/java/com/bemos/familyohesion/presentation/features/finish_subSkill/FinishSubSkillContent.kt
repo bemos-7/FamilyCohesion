@@ -64,7 +64,7 @@ import kotlinx.coroutines.launch
 fun FinishSubSkillContent(
     subSkill: SubSkill,
     familyMembers: List<FamilyMember>,
-    onEndCLick: (Uri, Int) -> Unit,
+    onEndCLick: (Uri, Int, SubSkill) -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -284,7 +284,7 @@ fun FinishSubSkillContent(
                         fourthIntervalMinutes = isPressedFourth,
                         onEndCLick = { time ->
                             if (imageUrl != null) {
-                                onEndCLick(imageUrl!!, time)
+                                onEndCLick(imageUrl!!, time, subSkill)
                             } else {
                                 Toast.makeText(context, "Пожалуйста, выберите изображение", Toast.LENGTH_SHORT).show()
                             }
@@ -387,7 +387,7 @@ private fun FinishSubSkillContentPreview() {
                 points = 0.0
             )
         ),
-        onEndCLick = { string, int ->
+        onEndCLick = { string, int, subskill ->
 
         },
         onBackClick = {}

@@ -1,6 +1,7 @@
 package com.bemos.familyohesion.presentation.di.module
 
 import com.bemos.familyohesion.domain.use_cases.CreateTaskUseCase
+import com.bemos.familyohesion.domain.use_cases.DeleteTaskUseCase
 import com.bemos.familyohesion.domain.use_cases.DeleteUserUseCase
 import com.bemos.familyohesion.domain.use_cases.GetAllSubSkillsRoomUseCase
 import com.bemos.familyohesion.domain.use_cases.GetCategoriesUseCase
@@ -150,10 +151,14 @@ class AppModule {
 
     @Provides
     fun provideTasksViewModelFactory(
-        getPendingTasksUseCase: GetPendingTasksUseCase
+        getPendingTasksUseCase: GetPendingTasksUseCase,
+        updateUserPointsUseCase: UpdateUserPointsUseCase,
+        deleteTaskUseCase: DeleteTaskUseCase
     ): TasksViewModelFactory {
         return TasksViewModelFactory(
-            getPendingTasksUseCase = getPendingTasksUseCase
+            getPendingTasksUseCase = getPendingTasksUseCase,
+            updateUserPointsUseCase = updateUserPointsUseCase,
+            deleteTaskUseCase = deleteTaskUseCase
         )
     }
 
